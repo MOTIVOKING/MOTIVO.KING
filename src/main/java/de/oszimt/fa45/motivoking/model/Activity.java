@@ -1,4 +1,4 @@
-package de.oszimt.fa45.motivoking;
+package de.oszimt.fa45.motivoking.model;
 
 /**
  * Created by boerg on 13.10.2016.
