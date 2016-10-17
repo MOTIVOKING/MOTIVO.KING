@@ -2,9 +2,6 @@ package de.oszimt.fa45.motivoking.ui;
 
 import de.oszimt.fa45.motivoking.data.DataHolder;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
-import de.oszimt.fa45.motivoking.ui.UserInterface;
-
-import java.io.Console;
 
 /**
  * Created by RedCyberSamurai on 17.10.2016.
