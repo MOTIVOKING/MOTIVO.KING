@@ -1,8 +1,12 @@
 package de.oszimt.fa45.motivoking;
 
 import de.oszimt.fa45.motivoking.data.DataHolder;
+import de.oszimt.fa45.motivoking.data.db.JSONDataHolder;
 import de.oszimt.fa45.motivoking.data.db.SqLiteDataHolder;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
+import de.oszimt.fa45.motivoking.functionality.ProgramLogic1;
+import de.oszimt.fa45.motivoking.functionality.ProgramLogic2;
+import de.oszimt.fa45.motivoking.ui.TerminalUserInterface;
 import de.oszimt.fa45.motivoking.ui.UserInterface;
 import de.oszimt.fa45.motivoking.ui.gui.GraphicalUserInterface;
 
@@ -134,6 +138,7 @@ public class Launcher {
             case "database":
             case "DataBase":
                 m_dataHolder = new SqLiteDataHolder();
+                System.out.println("-> Sqlite");
                 break;
             case "2":
             case "JSON":
@@ -141,8 +146,8 @@ public class Launcher {
             case "Json":
             case "File":
             case "file":
-                // TODO construct json dataholder
-                System.out.println(" -> JSON-File Data");
+                m_dataHolder = new JSONDataHolder();
+                System.out.println("-> JSON");
                 break;
         }
     }
@@ -158,11 +163,11 @@ public class Launcher {
         switch (s) {
             default:
             case "1":  // TODO: rename
-                // TODO new ProgramLogic( m_dataHolder )
+                m_programLogic = new ProgramLogic1( m_dataHolder );
                 System.out.println(" -> Fachkonzept 1");
                 break;
             case "2": // TODO: rename
-                // TODO new ProgramLogic( m_dataHolder )
+                m_programLogic = new ProgramLogic2( m_dataHolder );
                 System.out.println(" -> Fachkonzept 2");
                 break;
         }
@@ -190,7 +195,8 @@ public class Launcher {
             case "TUI":
             case "tui":
             case "Tui":
-                // TODO new UI(m_programLogic)
+                m_userInterface = new TerminalUserInterface( m_programLogic );
+
                 System.out.println(" -> TUI");
                 break;
         }
