@@ -15,9 +15,9 @@ public class Launcher {
     private Scanner m_scanner;
 
     // available options
-    private final int UI_OPTION = 0;
+    private final int DATA_OPTION = 0;
     private final int LOGIC_OPTION = 1;
-    private final int DATA_OPTION = 2;
+    private final int UI_OPTION = 2;
 
     // available layers
     private DataHolder m_dataHolder;
@@ -46,9 +46,10 @@ public class Launcher {
     public void init() {
         int numArgs = m_args.length;
 
-        chooseUI(numArgs > UI_OPTION);
-        chooseLogic(numArgs > LOGIC_OPTION);
+        // running commands in this order is required
         chooseDataManagement(numArgs > DATA_OPTION);
+        chooseLogic(numArgs > LOGIC_OPTION);
+        chooseUI(numArgs > UI_OPTION);
 
         m_scanner.close();
     }
@@ -59,7 +60,7 @@ public class Launcher {
      */
     public void start() {
         System.out.println(" --- STARTE SOFTWARE ---");
-        // TODO m_userInterface.run( m_programLogic, m_dataHolder );
+        // TODO m_userInterface.run();
     }
 
 
@@ -117,54 +118,6 @@ public class Launcher {
 
 
     /**
-     * Initialize the UI
-     * @param hasArgs
-     */
-    private void chooseUI(boolean hasArgs) {
-        String s = this.getOption(UI_OPTION, hasArgs);
-
-        switch (s) {
-            default:
-            case "1":
-            case "GUI":
-            case "gui":
-            case "Gui":
-                m_userInterface = new GraphicalUserInterface();
-                System.out.println(" -> GUI");
-                break;
-            case "2":
-            case "TUI":
-            case "tui":
-            case "Tui":
-                // TODO construct TUI
-                System.out.println(" -> TUI");
-                break;
-        }
-    }
-
-
-    /**
-     * Initialize the logic
-     * @param hasArgs
-     */
-    private void chooseLogic(boolean hasArgs) {
-        String s = this.getOption(LOGIC_OPTION, hasArgs);
-
-        switch (s) {
-            default:
-            case "1":  // TODO: rename
-                // TODO construct logic 1
-                System.out.println(" -> Fachkonzept 1");
-                break;
-            case "2": // TODO: rename
-                // TODO construct logic 2
-                System.out.println(" -> Fachkonzept 2");
-                break;
-        }
-    }
-
-
-    /**
      * Initialize the data management
      * @param hasArgs
      */
@@ -190,6 +143,55 @@ public class Launcher {
             case "file":
                 // TODO construct json dataholder
                 System.out.println(" -> JSON-File Data");
+                break;
+        }
+    }
+
+
+    /**
+     * Initialize the logic
+     * @param hasArgs
+     */
+    private void chooseLogic(boolean hasArgs) {
+        String s = this.getOption(LOGIC_OPTION, hasArgs);
+
+        switch (s) {
+            default:
+            case "1":  // TODO: rename
+                // TODO new ProgramLogic( m_dataHolder )
+                System.out.println(" -> Fachkonzept 1");
+                break;
+            case "2": // TODO: rename
+                // TODO new ProgramLogic( m_dataHolder )
+                System.out.println(" -> Fachkonzept 2");
+                break;
+        }
+    }
+
+
+    /**
+     * Initialize the UI
+     * @param hasArgs
+     */
+    private void chooseUI(boolean hasArgs) {
+        String s = this.getOption(UI_OPTION, hasArgs);
+
+        switch (s) {
+            default:
+            case "1":
+            case "GUI":
+            case "gui":
+            case "Gui":
+                // TODO new UI(m_programLogic)
+                m_userInterface = new GraphicalUserInterface();
+                System.out.println(" -> GUI");
+                break;
+            case "2":
+            case "TUI":
+            case "tui":
+            case "Tui":
+                // TODO new UI(m_programLogic)
+                System.out.println(" -> TUI");
                 break;
         }
     }
