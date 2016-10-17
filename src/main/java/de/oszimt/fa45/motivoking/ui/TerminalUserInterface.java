@@ -1,4 +1,4 @@
-package de.oszimt.fa45.motivoking.ui.gui;
+package de.oszimt.fa45.motivoking.ui;
 
 import de.oszimt.fa45.motivoking.data.DataHolder;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
