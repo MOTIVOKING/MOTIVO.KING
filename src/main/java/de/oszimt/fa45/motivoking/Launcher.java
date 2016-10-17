@@ -1,0 +1,190 @@
+package de.oszimt.fa45.motivoking;
+
+import de.oszimt.fa45.motivoking.data.DataHolder;
+import de.oszimt.fa45.motivoking.data.db.SqLiteDataHolder;
+import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
+import de.oszimt.fa45.motivoking.ui.UserInterface;
+import de.oszimt.fa45.motivoking.ui.gui.GraphicalUserInterface;
+
+import java.util.Scanner;
+
+/**
+ * Created by RedCyberSamurai on 17.10.2016.
+ */
+public class Launcher {
+    private Scanner m_scanner;
+
+    private final int UI_OPTION = 0;
+    private final int LOGIC_OPTION = 1;
+    private final int DATA_OPTION = 2;
+
+    private DataHolder dataHolder;
+    private ProgramLogic programLogic;
+    private UserInterface userInterface;
+
+    private String[] m_args;
+
+    /**
+     * Gets the arguments buffer from main method
+     * @param t_args
+     */
+    public Launcher(String[] t_args) {
+        m_args = t_args;
+
+        // arguments fallback
+        m_scanner = new Scanner(System.in);
+    }
+
+
+    /**
+     * Starts the program using terminal arguments
+     */
+    public void init() {
+        int numArgs = m_args.length;
+
+        chooseUI(numArgs > UI_OPTION);
+        chooseLogic(numArgs > LOGIC_OPTION);
+        chooseDataManagement(numArgs > DATA_OPTION);
+
+        m_scanner.close();
+    }
+
+
+    /**
+     * Run the application
+     */
+    public void start() {
+        System.out.println(" --- STARTE SOFTWARE ---");
+        // TODO userInterface.start();
+    }
+
+    /**
+     * Get the question requested by the given index
+     * @param index
+     * @return
+     */
+    private String getQuestion(int index) {
+        String question;
+
+        switch(index) {
+            case UI_OPTION:
+                question =  "Wählen Sie eine der folgenden Anwendungsoberflächen:\n";
+                question += "1) GUI - Grafische Oberfläche\n";
+                question += "2) TUI - Konsolenanwendung\n";
+                break;
+            case LOGIC_OPTION:
+                question =  "Wählen Sie eine der folgenden Fachkonzepte:\n";
+                question += "1) Fachkonzept 1\n";
+                question += "2) Fachkonzept 2\n";
+                break;
+            case DATA_OPTION:
+                question =  "Wählen Sie eine der folgenden Datenhaltungsmöglichkeiten:\n";
+                question += "1) SqLite\n";
+                question += "2) JSON\n";
+                break;
+            default:
+                question = "Error loading question of index " + index + "\n";
+                break;
+        }
+
+        question += "\n";
+
+        return question;
+    }
+
+    /**
+     * Get option for the required component
+     * @param index
+     * @param fromArguments
+     * @return
+     */
+    private String getOption(int index, boolean fromArguments) {
+
+        if( fromArguments) {
+            return m_args[index];
+        } else {
+            System.out.println( this.getQuestion(index) );
+
+            return m_scanner.next();
+        }
+    }
+
+
+    /**
+     * Initialize the UI
+     * @param hasArgs
+     */
+    private void chooseUI(boolean hasArgs) {
+        String s = this.getOption(UI_OPTION, hasArgs);
+
+        switch (s) {
+            default:
+            case "1":
+            case "GUI":
+            case "gui":
+            case "Gui":
+                userInterface = new GraphicalUserInterface();
+                System.out.println(" -> GUI");
+                break;
+            case "2":
+            case "TUI":
+            case "tui":
+            case "Tui":
+                // TODO construct TUI
+                System.out.println(" -> TUI");
+                break;
+        }
+    }
+
+
+    /**
+     * Initialize the logic
+     * @param hasArgs
+     */
+    private void chooseLogic(boolean hasArgs) {
+        String s = this.getOption(LOGIC_OPTION, hasArgs);
+
+        switch (s) {
+            default:
+            case "1":  // TODO: rename
+                // TODO construct logic 1
+                System.out.println(" -> Fachkonzept 1");
+                break;
+            case "2": // TODO: rename
+                // TODO construct logic 2
+                System.out.println(" -> Fachkonzept 2");
+                break;
+        }
+    }
+
+
+    /**
+     * Initialize the data management
+     * @param hasArgs
+     */
+    private void chooseDataManagement(boolean hasArgs) {
+        String s = this.getOption(DATA_OPTION, hasArgs);
+
+        switch (s) {
+            default:
+            case "1":
+            case "DB":
+            case "db":
+            case "Db":
+            case "Database":
+            case "database":
+            case "DataBase":
+                dataHolder = new SqLiteDataHolder();
+                break;
+            case "2":
+            case "JSON":
+            case "json":
+            case "Json":
+            case "File":
+            case "file":
+                // TODO construct json dataholder
+                System.out.println(" -> JSON-File Data");
+                break;
+        }
+    }
+}
