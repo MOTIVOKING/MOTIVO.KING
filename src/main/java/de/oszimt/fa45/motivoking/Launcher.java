@@ -14,15 +14,19 @@ import java.util.Scanner;
 public class Launcher {
     private Scanner m_scanner;
 
+    // available options
     private final int UI_OPTION = 0;
     private final int LOGIC_OPTION = 1;
     private final int DATA_OPTION = 2;
 
-    private DataHolder dataHolder;
-    private ProgramLogic programLogic;
-    private UserInterface userInterface;
+    // available layers
+    private DataHolder m_dataHolder;
+    private ProgramLogic m_programLogic;
+    private UserInterface m_userInterface;
 
+    // stored input buffer
     private String[] m_args;
+
 
     /**
      * Gets the arguments buffer from main method
@@ -55,8 +59,9 @@ public class Launcher {
      */
     public void start() {
         System.out.println(" --- STARTE SOFTWARE ---");
-        // TODO userInterface.start();
+        // TODO m_userInterface.run( m_programLogic, m_dataHolder );
     }
+
 
     /**
      * Get the question requested by the given index
@@ -92,6 +97,7 @@ public class Launcher {
         return question;
     }
 
+
     /**
      * Get option for the required component
      * @param index
@@ -123,7 +129,7 @@ public class Launcher {
             case "GUI":
             case "gui":
             case "Gui":
-                userInterface = new GraphicalUserInterface();
+                m_userInterface = new GraphicalUserInterface();
                 System.out.println(" -> GUI");
                 break;
             case "2":
@@ -174,7 +180,7 @@ public class Launcher {
             case "Database":
             case "database":
             case "DataBase":
-                dataHolder = new SqLiteDataHolder();
+                m_dataHolder = new SqLiteDataHolder();
                 break;
             case "2":
             case "JSON":
