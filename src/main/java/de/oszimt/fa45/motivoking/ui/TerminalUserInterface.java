@@ -27,14 +27,18 @@ public class TerminalUserInterface implements UserInterface {
     }
 
 
-    // TODO interface method
-    public void run() {
+    @Override
+    public void activate() {
+        this.clear();
 
         while(m_isRunning) {
 
             // TODO add page index or sth ...
             this.menu();
         }
+
+        m_scanner.close();
+        System.out.println("Programm beendet.");
     }
 
 
@@ -45,6 +49,7 @@ public class TerminalUserInterface implements UserInterface {
         String msg;
         msg = "Hauptmenü\n";
         msg += this.line();
+        msg += "\n";
         msg += "1) Tage auflisten\n";
         msg += "2) Aktivitäten auflisten\n";
         msg += "3) Statistik aufrufen\n";
@@ -58,8 +63,10 @@ public class TerminalUserInterface implements UserInterface {
 
         String input = m_scanner.next();
 
+        this.clear();
         switch(input) {
-            default: // ....
+            default:
+                System.out.println("Command not recognized\n\n");
                 break;
             case "0":
                 this.m_isRunning = false;
@@ -71,10 +78,13 @@ public class TerminalUserInterface implements UserInterface {
                 this.listActivities( new Day() );
                 break;
             case "3": // TODO stats (?)
+                System.out.println("TODO stats\n\n");
                 break;
             case "4": // TODO add new Day()
+                System.out.println("TODO day\n\n");
                 break;
             case "5": // TODO add new Activity()
+                System.out.println("TODO activity\n\n");
                 break;
         }
 
@@ -85,13 +95,13 @@ public class TerminalUserInterface implements UserInterface {
      * Lists all days stored in the data management system
      */
     protected void listDays() {
-        this.clear();
 
         // TODO program logic
 
         String msg;
         msg = "Liste aller geplanten Tage\n";
         msg += this.line();
+        msg += "\n";
         msg += "xxxx-xx-xx (5 Aktivitäten)\n";
         msg += "xxxx-xx-xx (2 Aktivitäten)\n";
         msg += "xxxx-xx-xx (8 Aktivitäten)\n";
@@ -108,12 +118,13 @@ public class TerminalUserInterface implements UserInterface {
      * @param day
      */
     protected void listActivities(Day day) {
-        this.clear();
 
         // TODO program logic
 
         String msg;
         msg = "Aktivitäten (Datum: xxxx-xx-xx)\n";
+        msg += this.line();
+        msg += "\n";
         msg += "Aktivität           |  Stresslevel  |  Entspannungslevel\n";
         msg += this.line();
         msg += "Kaffee trinken      |  20           |  2000\n";
@@ -146,6 +157,6 @@ public class TerminalUserInterface implements UserInterface {
             s += "\n";
         }
 
-        System.out.println();
+        System.out.println(s);
     }
 }

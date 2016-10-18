@@ -12,4 +12,9 @@ public class GraphicalUserInterface extends Application implements UserInterface
     public void start(Stage primaryStage) throws Exception {
 
     }
+
+    @Override
+    public void activate() {
+        // UI requirement
+    }
 }

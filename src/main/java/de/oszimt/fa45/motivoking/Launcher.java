@@ -62,7 +62,8 @@ public class Launcher {
      */
     public void start() {
         System.out.println(" --- STARTE SOFTWARE ---");
-        // TODO m_userInterface.run();
+
+        m_userInterface.activate();
     }
 
 
