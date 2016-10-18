@@ -54,8 +54,6 @@ public class Launcher {
         chooseDataManagement(numArgs > DATA_OPTION);
         chooseLogic(numArgs > LOGIC_OPTION);
         chooseUI(numArgs > UI_OPTION);
-
-        m_scanner.close();
     }
 
 
@@ -195,7 +193,7 @@ public class Launcher {
             case "TUI":
             case "tui":
             case "Tui":
-                m_userInterface = new TerminalUserInterface( m_programLogic );
+                m_userInterface = new TerminalUserInterface( m_programLogic, m_scanner );
 
                 System.out.println(" -> TUI");
                 break;
