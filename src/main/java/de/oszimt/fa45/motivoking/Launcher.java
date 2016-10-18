@@ -51,9 +51,9 @@ public class Launcher {
         int numArgs = m_args.length;
 
         // running commands in this order is required
-        chooseDataManagement(numArgs > DATA_OPTION);
-        chooseLogic(numArgs > LOGIC_OPTION);
-        chooseUI(numArgs > UI_OPTION);
+        this.chooseDataManagement(numArgs > DATA_OPTION);
+        this.chooseLogic(numArgs > LOGIC_OPTION);
+        this.chooseUI(numArgs > UI_OPTION);
     }
 
 
@@ -110,13 +110,12 @@ public class Launcher {
      */
     private String getOption(int index, boolean fromArguments) {
 
-        if( fromArguments) {
+        if( fromArguments ) {
             return m_args[index];
-        } else {
-            System.out.println( this.getQuestion(index) );
-
-            return m_scanner.next();
         }
+
+        System.out.println( this.getQuestion(index) );
+        return m_scanner.next();
     }
 
 
