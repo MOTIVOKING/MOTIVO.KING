@@ -193,7 +193,7 @@ public class Launcher {
             case "TUI":
             case "tui":
             case "Tui":
-                m_userInterface = new TerminalUserInterface( m_programLogic, m_scanner );
+                m_userInterface = new TerminalUserInterface( m_programLogic, m_scanner, m_dataHolder );
 
                 System.out.println(" -> TUI");
                 break;

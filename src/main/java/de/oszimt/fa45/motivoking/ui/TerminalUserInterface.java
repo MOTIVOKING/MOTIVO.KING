@@ -1,8 +1,11 @@
 package de.oszimt.fa45.motivoking.ui;
 
+import de.oszimt.fa45.motivoking.data.DataHolder;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
+import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
 
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -12,6 +15,7 @@ public class TerminalUserInterface implements UserInterface {
     private Scanner m_scanner;
 
     private ProgramLogic m_programLogic;
+    private DataHolder m_dataHolder;
 
     private boolean m_isRunning = true;
 
@@ -21,9 +25,12 @@ public class TerminalUserInterface implements UserInterface {
      * @param t_programLogic
      * @param t_scanner
      */
-    public TerminalUserInterface(ProgramLogic t_programLogic, Scanner t_scanner) {
+    public TerminalUserInterface(ProgramLogic t_programLogic, Scanner t_scanner, DataHolder t_dataHolder) {
         m_programLogic = t_programLogic;
         m_scanner = t_scanner;
+
+        // DEBUG ONLY, DELETE IT FROM PARAMS!!!
+        m_dataHolder = t_dataHolder;
     }
 
 
@@ -64,30 +71,57 @@ public class TerminalUserInterface implements UserInterface {
         String input = m_scanner.next();
 
         this.clear();
+        this.runPage(input);
+    }
+
+    private void runPage(String input) {
+        Day day;
+
         switch(input) {
             default:
                 System.out.println("Command not recognized\n\n");
                 break;
             case "0":
+            case "exit":
                 this.m_isRunning = false;
                 break;
             case "1":
+            case "days":
                 this.listDays();
                 break;
             case "2":
-                this.listActivities( new Day() );
+            case "activities":
+                this.listActivities( new Day(new Date()) );
                 break;
             case "3": // TODO stats (?)
                 System.out.println("TODO stats\n\n");
                 break;
             case "4": // TODO add new Day()
+            case "create day":
                 System.out.println("TODO day\n\n");
+
+                Date date = new Date();
+                day = new Day(date);
+
+                m_dataHolder.addDay(day);
+
+                System.out.println("Day added (" + date.toString() +  ")");
+                this.runPage("days");
                 break;
             case "5": // TODO add new Activity()
+            case "create activity":
                 System.out.println("TODO activity\n\n");
+
+                day = m_dataHolder.findDayById(0);
+                Activity activity = new Activity("Some Activity", 100, 999);
+                m_dataHolder.addActivity(day.getId(), activity);
+
+                System.out.println("Activity: " + activity.getName() +
+                        ", Stress: " + activity.getStressLevel() +
+                        ", Relax: " + activity.getRelaxLevel()
+                );
                 break;
         }
-
     }
 
 
