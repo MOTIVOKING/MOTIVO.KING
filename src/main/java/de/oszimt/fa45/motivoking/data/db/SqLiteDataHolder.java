@@ -11,6 +11,11 @@ import java.util.List;
  */
 public class SqLiteDataHolder implements DataHolder {
     @Override
+    public Day findDayById(long dayId) {
+        return null;
+    }
+
+    @Override
     public List<Day> findAllDays() {
         return null;
     }
