@@ -45,25 +45,15 @@ public class Launcher {
 
 
     /**
-     * Starts the program using terminal arguments
+     * Run the application
      */
-    public void init() {
+    public void start() {
         int numArgs = m_args.length;
 
         // running commands in this order is required
         this.chooseDataManagement(numArgs > DATA_OPTION);
         this.chooseLogic(numArgs > LOGIC_OPTION);
         this.chooseUI(numArgs > UI_OPTION);
-    }
-
-
-    /**
-     * Run the application
-     */
-    public void start() {
-        System.out.println(" --- STARTING SOFTWARE ---");
-
-        m_userInterface.activate();
     }
 
 
@@ -185,7 +175,6 @@ public class Launcher {
             case "GUI":
             case "gui":
             case "Gui":
-                // TODO new UI(m_programLogic)
                 m_userInterface = new GraphicalUserInterface(m_programLogic);
                 System.out.println(" -> GUI");
                 break;
@@ -193,8 +182,8 @@ public class Launcher {
             case "TUI":
             case "tui":
             case "Tui":
+                // TODO m_dataHolder -> to m_programLogic; delete last param
                 m_userInterface = new TerminalUserInterface( m_programLogic, m_scanner, m_dataHolder );
-
                 System.out.println(" -> TUI");
                 break;
         }

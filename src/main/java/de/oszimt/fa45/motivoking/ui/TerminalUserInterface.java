@@ -31,13 +31,9 @@ public class TerminalUserInterface implements UserInterface {
 
         // DEBUG ONLY, DELETE IT FROM PARAMS!!!
         m_dataHolder = t_dataHolder;
-    }
 
 
-    @Override
-    public void activate() {
         this.clear();
-
         while(m_isRunning) {
 
             // TODO add page index or sth ...

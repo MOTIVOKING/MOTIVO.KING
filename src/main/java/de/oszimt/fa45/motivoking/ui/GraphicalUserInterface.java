@@ -1,7 +1,6 @@
 package de.oszimt.fa45.motivoking.ui;
 
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
-import de.oszimt.fa45.motivoking.ui.UserInterface;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,6 +23,8 @@ public class GraphicalUserInterface extends Application implements UserInterface
 
     public GraphicalUserInterface(ProgramLogic programLogic) {
         this.programLogic = programLogic;
+
+        this.launch("");
     }
 
     @Override
@@ -45,12 +46,6 @@ public class GraphicalUserInterface extends Application implements UserInterface
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void activate() {
-        // UI requirement
-        this.launch("");
     }
 
     @FXML
