@@ -8,7 +8,7 @@ import de.oszimt.fa45.motivoking.functionality.ProgramLogic1;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic2;
 import de.oszimt.fa45.motivoking.ui.TerminalUserInterface;
 import de.oszimt.fa45.motivoking.ui.UserInterface;
-import de.oszimt.fa45.motivoking.ui.gui.GraphicalUserInterface;
+import de.oszimt.fa45.motivoking.ui.GraphicalUserInterface;
 
 import java.util.Scanner;
 
@@ -61,7 +61,7 @@ public class Launcher {
      * Run the application
      */
     public void start() {
-        System.out.println(" --- STARTE SOFTWARE ---");
+        System.out.println(" --- STARTING SOFTWARE ---");
 
         m_userInterface.activate();
     }
