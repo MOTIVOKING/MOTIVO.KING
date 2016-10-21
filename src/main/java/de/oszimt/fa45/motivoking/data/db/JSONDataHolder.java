@@ -6,39 +6,41 @@ import com.google.gson.stream.JsonReader;
 import de.oszimt.fa45.motivoking.data.DataHolder;
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
+import de.oszimt.fa45.motivoking.model.JsonData;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by RedCyberSamurai on 17.10.2016.
  */
 public class JSONDataHolder implements DataHolder {
-    private Gson gson;
-
+    // target file name
     private final String FILE_NAME = "testfile.json";
 
+    // available members
+    private JsonData m_data;
+    private Gson m_gson;
     private List<Day> m_days;
 
     public JSONDataHolder() {
-        gson = new Gson();
+        m_gson = new Gson();
 
-        m_days = this.read();
+        m_data = this.read();
+        m_days = m_data.getDays();
     }
 
 
     /**
-     * Reads the json file
-     * @param <T>
-     * @return  A list of the given type
+     * Reads the JSON file.
+     * @return  A JsonData Model.
      */
-    private <T> List<T> read() {
-        List<T> out = null;
+    private JsonData read() {
+        JsonData data = null;
 
         File file = new File(FILE_NAME);
         if ( !file.exists() ) {
@@ -53,8 +55,8 @@ public class JSONDataHolder implements DataHolder {
             FileReader fReader = new FileReader(FILE_NAME);
             JsonReader jReader = new JsonReader(fReader);
 
-            Type listType = new TypeToken<List<T>>(){}.getType();
-            out = gson.fromJson(jReader, listType);
+            Type dataType = new TypeToken<JsonData>(){}.getType();
+            data = m_gson.fromJson(jReader, dataType);
 
             jReader.close();
             fReader.close();
@@ -62,16 +64,16 @@ public class JSONDataHolder implements DataHolder {
             e.printStackTrace();
         }
 
-        if(out == null) {
-            out = new ArrayList<>();
+        if(data == null) {
+            data = new JsonData();
         }
 
-        return out;
+        return data;
     }
 
 
     /**
-     * Saves the changes made
+     * Saves the changes made.
      * @param in
      */
     private void write(String in) {
@@ -87,48 +89,98 @@ public class JSONDataHolder implements DataHolder {
     }
 
 
-    public Day findDayById(long dayId) {
-        Day t_day = null;
+    /**
+     * Finds the day by given long value.
+     * @param t_dayId    The id of the Day entity. The value must be > 1.
+     * @return  A Day Model or null.
+     */
+    public Day findDayById(long t_dayId) {
 
-        for(Day day: m_days) {
-
-            if(day.getId() == dayId) {
-                t_day = day;
-                break;
-            }
+        if(t_dayId < 1) {
+            System.out.printf("Day ID %s not found.", t_dayId);
+            return null;
         }
+
+        Day t_day = m_days.stream().filter(day -> day.getId() == t_dayId).findFirst().orElse(null);
 
         return t_day;
     }
 
 
+    /**
+     * Lists all days.
+     * @return  An Array with Day Models.
+     */
     @Override
     public List<Day> findAllDays() {
         return m_days;
     }
 
 
+    /**
+     * Lists activities by a given long value
+     * @param t_dayId    The id of the Day entity. The value must be > 1.
+     * @return  An Array with Activity Models
+     */
     @Override
-    public List<Activity> findActivitiesByDayId(long dayId) {
-        Day t_day = this.findDayById(dayId);
+    public List<Activity> findActivitiesByDayId(long t_dayId) {
+
+        if(t_dayId < 1) {
+            System.out.printf("Day ID %s not found.", t_dayId);
+            return null;
+        }
+
+        Day t_day = this.findDayById(t_dayId);
 
         return t_day.getActivities();
     }
 
 
+    /**
+     * Adds a day to the JSON file.
+     * @param t_day
+     */
     @Override
-    public void addDay(Day day) {
-        m_days.add(day);
+    public void addDay(Day t_day) {
 
-        this.write( gson.toJson(m_days) );
+        if(t_day != null) {
+            Day day = t_day;
+            day.setId( m_data.getAI("day") );
+            m_days.add(day);
+            System.out.println("Day added (" + day.getDate().toString() +  ")");
+
+            this.write( m_gson.toJson(m_data) );
+        } else {
+            System.out.println("Error: Could not add day.\n");
+        }
     }
 
 
+    /**
+     * Adds an Activity to a Day of a given id. The Result will be added to the JSON file.
+     * @param t_dayId       The id of the Day entity. The value must be > 1.
+     * @param t_activity    The Activity Model to save.
+     */
     @Override
-    public void addActivity(long dayId, Activity activity) {
-        Day day = this.findDayById(dayId);
-        day.setActivity(activity);
+    public void addActivity(long t_dayId, Activity t_activity) {
 
-        this.write( gson.toJson(m_days) );
+        if(t_dayId > 0 && t_activity != null) {
+            Day day = this.findDayById(t_dayId);
+
+            if(day != null) {
+                t_activity.setId( m_data.getAI("activity") );
+                day.setActivity(t_activity);
+
+                this.write( m_gson.toJson(m_data) );
+
+                System.out.println("Activity: " + t_activity.getName() +
+                        ", Stress: " + t_activity.getStressLevel() +
+                        ", Relax: " + t_activity.getRelaxLevel()
+                );
+            } else {
+                System.out.println("Activity not added. No day found.\n");
+            }
+        }
+
     }
 }

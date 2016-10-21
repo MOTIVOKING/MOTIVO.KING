@@ -102,24 +102,17 @@ public class TerminalUserInterface implements UserInterface {
 
                 Date date = new Date();
                 day = new Day(date);
-
                 m_dataHolder.addDay(day);
 
-                System.out.println("Day added (" + date.toString() +  ")");
                 this.runPage("days");
                 break;
             case "5": // TODO add new Activity()
             case "create activity":
                 System.out.println("TODO activity\n\n");
 
-                day = m_dataHolder.findDayById(0);
+                int id = 1;
                 Activity activity = new Activity("Some Activity", 100, 999);
-                m_dataHolder.addActivity(day.getId(), activity);
-
-                System.out.println("Activity: " + activity.getName() +
-                        ", Stress: " + activity.getStressLevel() +
-                        ", Relax: " + activity.getRelaxLevel()
-                );
+                m_dataHolder.addActivity(id, activity);
                 break;
         }
     }
