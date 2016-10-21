@@ -12,9 +12,19 @@ public class Day {
     private Date            m_date;
     private List<Activity>  m_activities;
 
+    public Day() {
+        m_date = new Date();
+        this.init();
+    }
+
     public Day(Date t_date) {
-        m_id = 0; // TODO data holder
         m_date = t_date;
+        this.init();
+    }
+
+
+    private void init() {
+        m_id = 0;
         m_activities = new ArrayList<Activity>();
     }
 
