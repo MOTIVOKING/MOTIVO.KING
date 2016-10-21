@@ -7,6 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.DialogPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -52,7 +55,12 @@ public class GraphicalUserInterface extends Application implements UserInterface
 
     @FXML
     private void onAddDay(ActionEvent actionEvent) {
-
+        Alert dateInput = new Alert(Alert.AlertType.NONE);
+        DialogPane dialogPane = new DialogPane();
+        DatePicker datePicker = new DatePicker();
+        dialogPane.getChildren().add(datePicker);
+        dateInput.setDialogPane(dialogPane);
+        dateInput.showAndWait();
     }
 
     @FXML

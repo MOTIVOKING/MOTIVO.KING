@@ -186,7 +186,7 @@ public class Launcher {
             case "gui":
             case "Gui":
                 // TODO new UI(m_programLogic)
-                m_userInterface = new GraphicalUserInterface();
+                m_userInterface = new GraphicalUserInterface(m_programLogic);
                 System.out.println(" -> GUI");
                 break;
             case "2":
