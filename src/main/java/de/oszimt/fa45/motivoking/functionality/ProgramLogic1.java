@@ -12,5 +12,24 @@ public class ProgramLogic1 implements ProgramLogic{
         m_dataHolder = t_dataHolder;
     }
 
-    
+
+    @Override
+    public void create() {
+
+    }
+
+    @Override
+    public void read() {
+
+    }
+
+    @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void delete() {
+
+    }
 }
