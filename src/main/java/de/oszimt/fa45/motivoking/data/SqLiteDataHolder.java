@@ -1,4 +1,4 @@
-package de.oszimt.fa45.motivoking.data.db;
+package de.oszimt.fa45.motivoking.data;
 
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;

@@ -1,4 +1,4 @@
-package de.oszimt.fa45.motivoking.data.db;
+package de.oszimt.fa45.motivoking.data;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
