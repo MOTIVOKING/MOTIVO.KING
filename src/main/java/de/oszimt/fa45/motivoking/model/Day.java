@@ -8,53 +8,47 @@ import java.util.List;
  * Created by boerg on 13.10.2016.
  */
 public class Day {
-    private long            m_id;
-    private Date            m_date;
-    private List<Activity>  m_activities;
+    private long id;
+    private Date date;
+    private List<Activity> activities;
 
     public Day() {
-        m_date = new Date();
-        this.init();
+        new Day(new Date());
     }
 
     public Day(Date t_date) {
-        m_date = t_date;
-        this.init();
+        date = t_date;
+        id = 0;
+        activities = new ArrayList<Activity>();
     }
 
 
-    private void init() {
-        m_id = 0;
-        m_activities = new ArrayList<Activity>();
-    }
-
-
-    public void setId(long t_id) {
-        m_id = t_id;
+    public void setId(long id) {
+        id = id;
     }
 
 
     public long getId() {
-        return m_id;
+        return id;
     }
 
 
     public Date getDate() {
-        return m_date;
+        return date;
     }
 
 
-    public void setDate(Date t_date) {
-        m_date = t_date;
+    public void setDate(Date date) {
+        date = date;
     }
 
 
     public List<Activity> getActivities() {
-        return m_activities;
+        return activities;
     }
 
 
-    public void setActivity(Activity t_activity) {
-        m_activities.add(t_activity);
+    public void setActivity(Activity activity) {
+        activities.add(activity);
     }
 }

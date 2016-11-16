@@ -1,8 +1,8 @@
 package de.oszimt.fa45.motivoking;
 
 import de.oszimt.fa45.motivoking.data.DataHolder;
-import de.oszimt.fa45.motivoking.data.db.JSONDataHolder;
-import de.oszimt.fa45.motivoking.data.db.SqLiteDataHolder;
+import de.oszimt.fa45.motivoking.data.JSONDataHolder;
+import de.oszimt.fa45.motivoking.data.SqLiteDataHolder;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic1;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic2;
@@ -10,8 +10,6 @@ import de.oszimt.fa45.motivoking.ui.TerminalUserInterface;
 import de.oszimt.fa45.motivoking.ui.UserInterface;
 import de.oszimt.fa45.motivoking.ui.GraphicalUserInterface;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.stage.Stage;
 
 import java.util.Scanner;
 
@@ -27,20 +25,20 @@ public class Launcher {
     private final int UI_OPTION = 2;
 
     // available layers
-    private DataHolder m_dataHolder;
-    private ProgramLogic m_programLogic;
-    private UserInterface m_userInterface;
+    private DataHolder mDataHolder;
+    private ProgramLogic mProgramLogic;
+    private UserInterface mUserInterface;
 
     // stored input buffer
-    private String[] m_args;
+    private String[] mArgs;
 
 
     /**
      * Gets the arguments buffer from main method
-     * @param t_args
+     * @param args
      */
-    public Launcher(String[] t_args) {
-        m_args = t_args;
+    public Launcher(String[] args) {
+        mArgs = args;
 
         // arguments fallback
         m_scanner = new Scanner(System.in);
@@ -51,7 +49,7 @@ public class Launcher {
      * Run the application
      */
     public void start() {
-        int numArgs = m_args.length;
+        int numArgs = mArgs.length;
 
         // running commands in this order is required
         this.chooseDataManagement(numArgs > DATA_OPTION);
@@ -104,7 +102,7 @@ public class Launcher {
     private String getOption(int index, boolean fromArguments) {
 
         if( fromArguments ) {
-            return m_args[index];
+            return mArgs[index];
         }
 
         System.out.println( this.getQuestion(index) );
@@ -128,7 +126,7 @@ public class Launcher {
             case "Database":
             case "database":
             case "DataBase":
-                m_dataHolder = new SqLiteDataHolder();
+                mDataHolder = new SqLiteDataHolder();
                 System.out.println("-> Sqlite");
                 break;
             case "2":
@@ -137,7 +135,7 @@ public class Launcher {
             case "Json":
             case "File":
             case "file":
-                m_dataHolder = new JSONDataHolder();
+                mDataHolder = new JSONDataHolder();
                 System.out.println("-> JSON");
                 break;
         }
@@ -154,11 +152,11 @@ public class Launcher {
         switch (s) {
             default:
             case "1":  // TODO: rename
-                m_programLogic = new ProgramLogic1( m_dataHolder );
+                mProgramLogic = new ProgramLogic1(mDataHolder);
                 System.out.println(" -> Fachkonzept 1");
                 break;
             case "2": // TODO: rename
-                m_programLogic = new ProgramLogic2( m_dataHolder );
+                mProgramLogic = new ProgramLogic2(mDataHolder);
                 System.out.println(" -> Fachkonzept 2");
                 break;
         }
@@ -178,18 +176,18 @@ public class Launcher {
             case "GUI":
             case "gui":
             case "Gui":
-//                m_userInterface = new GraphicalUserInterface(m_programLogic);
+//                mUserInterface = new GraphicalUserInterface(mProgramLogic);
 //                GraphicalUserInterface graphicalUserInterface = new GraphicalUserInterface();
                 Application.launch(GraphicalUserInterface.class);
-                GraphicalUserInterface.getInstance().setProgramLogic(m_programLogic);
+                GraphicalUserInterface.getInstance().setProgramLogic(mProgramLogic);
                 System.out.println(" -> GUI");
                 break;
             case "2":
             case "TUI":
             case "tui":
             case "Tui":
-                // TODO m_dataHolder -> to m_programLogic; delete last param
-                m_userInterface = new TerminalUserInterface( m_programLogic, m_scanner, m_dataHolder );
+                // TODO mDataHolder -> to mProgramLogic; delete last param
+                mUserInterface = new TerminalUserInterface(mProgramLogic, m_scanner, mDataHolder);
                 System.out.println(" -> TUI");
                 break;
         }

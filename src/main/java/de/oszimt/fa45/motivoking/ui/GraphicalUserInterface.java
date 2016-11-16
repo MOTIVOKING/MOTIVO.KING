@@ -1,26 +1,35 @@
 package de.oszimt.fa45.motivoking.ui;
 
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
+import de.oszimt.fa45.motivoking.model.Day;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.DialogPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * Created by boerg on 13.10.2016.
  */
-public class GraphicalUserInterface extends Application implements UserInterface {
+public class GraphicalUserInterface extends Application implements UserInterface, Initializable {
     private static GraphicalUserInterface instance;
     private Stage primaryStage;
     private ProgramLogic programLogic;
+
+    @FXML private TableView<Day> tv_dates;
+    @FXML private TableColumn<Day, String> column_date;
 
     public GraphicalUserInterface() {
         this.instance = this;
@@ -42,6 +51,13 @@ public class GraphicalUserInterface extends Application implements UserInterface
         System.out.println("Graphical User Interface started");
         this.primaryStage = primaryStage;
         initRootLayout();
+        initDays();
+    }
+
+    private void initDays() {
+        ObservableList<Day> l = FXCollections.observableArrayList();
+        l.addAll(programLogic.getDays());
+        tv_dates.setItems(l);
     }
 
     private void initRootLayout() {
@@ -78,5 +94,10 @@ public class GraphicalUserInterface extends Application implements UserInterface
 
     @FXML
     private void onChangeAction(ActionEvent actionEvent) {
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        column_date.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate().toString()));
     }
 }
