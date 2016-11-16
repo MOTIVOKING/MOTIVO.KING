@@ -18,13 +18,23 @@ import java.io.IOException;
  * Created by boerg on 13.10.2016.
  */
 public class GraphicalUserInterface extends Application implements UserInterface {
+    private static GraphicalUserInterface instance;
     private Stage primaryStage;
     private ProgramLogic programLogic;
 
-    public GraphicalUserInterface(ProgramLogic programLogic) {
-        this.programLogic = programLogic;
+    public GraphicalUserInterface() {
+        this.instance = this;
+//        this.programLogic = programLogic;
+//        Application.launch();
+//        this.launch();
+    }
 
-        this.launch("");
+    public static GraphicalUserInterface getInstance() {
+        return instance;
+    }
+
+    public void setProgramLogic(ProgramLogic programLogic) {
+        this.programLogic = programLogic;
     }
 
     @Override
