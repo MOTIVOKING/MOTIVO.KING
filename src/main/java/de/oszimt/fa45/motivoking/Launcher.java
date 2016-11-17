@@ -183,7 +183,7 @@ public class Launcher {
             case "tui":
             case "Tui":
                 // TODO m_dataHolder -> to m_programLogic; delete last param
-                m_userInterface = new TerminalUserInterface( m_programLogic, m_scanner, m_dataHolder );
+                m_userInterface = new TerminalUserInterface( m_programLogic, m_scanner );
                 System.out.println(" -> TUI");
                 break;
         }
