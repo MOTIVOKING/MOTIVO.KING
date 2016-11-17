@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by boerg on 13.10.2016.
  */
-public class Day {
+public class Day implements Model {
     private long            m_id;
     private Date            m_date;
     private List<Activity>  m_activities;

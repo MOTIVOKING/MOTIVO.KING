@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by RedCyberSamurai on 21.10.2016.
  */
-public class JsonData {
+public class JsonData implements Model {
     private int m_dayAI = 0;
     private int m_activityAI = 0;
 
