@@ -1,20 +1,15 @@
 package de.oszimt.fa45.motivoking.functionality;
 
-import de.oszimt.fa45.motivoking.data.DataHolder;
 import de.oszimt.fa45.motivoking.model.Day;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
- * Created by RedCyberSamurai on 17.10.2016.
+ * Created by boerg on 16.11.2016.
  */
-public class ProgramLogic2 implements ProgramLogic {
-    private DataHolder m_dataHolder;
-
-    public ProgramLogic2(DataHolder t_dataHolder) {
-        m_dataHolder = t_dataHolder;
-    }
-
+public class StubLogic implements ProgramLogic {
     @Override
     public void create() {
 
@@ -37,6 +32,9 @@ public class ProgramLogic2 implements ProgramLogic {
 
     @Override
     public List<Day> getDays() {
-        return null;
+        List<Day> days = new ArrayList<>();
+        days.add(new Day(new Date(2016, 05, 11)));
+        days.add(new Day(new Date(2016, 11, 16)));
+        return days;
     }
 }

@@ -1,6 +1,9 @@
 package de.oszimt.fa45.motivoking.functionality;
 
 import de.oszimt.fa45.motivoking.data.DataHolder;
+import de.oszimt.fa45.motivoking.model.Day;
+
+import java.util.List;
 
 /**
  * Created by RedCyberSamurai on 17.10.2016.
@@ -31,5 +34,10 @@ public class ProgramLogic1 implements ProgramLogic{
     @Override
     public void delete() {
 
+    }
+
+    @Override
+    public List<Day> getDays() {
+        return null;
     }
 }
