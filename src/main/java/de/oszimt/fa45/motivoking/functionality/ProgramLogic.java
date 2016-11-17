@@ -9,6 +9,7 @@ import java.util.List;
  * Created by boerg on 12.10.2016.
  */
 public interface ProgramLogic {
+    
     void createDay();
     void createActivity(int id);
     Day getDay(int id);

@@ -30,6 +30,7 @@ public class ProgramLogic2 implements ProgramLogic {
         m_dataHolder.addDay(day);
     }
 
+
     public void createActivity(int id) {
         // TODO assign activity to a selected day
 
@@ -37,35 +38,18 @@ public class ProgramLogic2 implements ProgramLogic {
         m_dataHolder.addActivity(activity.getId(), activity);
     }
 
+
     public Day getDay(int id) {
         return m_dataHolder.findDayById(id);
     }
+
 
     public List<Day> getDays() {
         return m_dataHolder.findAllDays();
     }
 
+
     public List<Activity> getActivities(int id) {
         return m_dataHolder.findActivitiesByDayId(id);
-    }
-
-    @Override
-    public void create() {
-
-    }
-
-    @Override
-    public void read() {
-
-    }
-
-    @Override
-    public void update() {
-
-    }
-
-    @Override
-    public void delete() {
-
     }
 }
