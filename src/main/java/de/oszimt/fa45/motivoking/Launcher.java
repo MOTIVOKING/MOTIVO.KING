@@ -1,8 +1,8 @@
 package de.oszimt.fa45.motivoking;
 
 import de.oszimt.fa45.motivoking.data.DataHolder;
-import de.oszimt.fa45.motivoking.data.db.JSONDataHolder;
-import de.oszimt.fa45.motivoking.data.db.SqLiteDataHolder;
+import de.oszimt.fa45.motivoking.data.JSONDataHolder;
+import de.oszimt.fa45.motivoking.data.SqLiteDataHolder;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic1;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic2;
