@@ -1,11 +1,10 @@
 package de.oszimt.fa45.motivoking.ui;
 
-import de.oszimt.fa45.motivoking.data.DataHolder;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
-import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -15,7 +14,6 @@ public class TerminalUserInterface implements UserInterface {
     private Scanner m_scanner;
 
     private ProgramLogic m_programLogic;
-    private DataHolder m_dataHolder;
 
     private boolean m_isRunning = true;
 
@@ -25,18 +23,14 @@ public class TerminalUserInterface implements UserInterface {
      * @param t_programLogic
      * @param t_scanner
      */
-    public TerminalUserInterface(ProgramLogic t_programLogic, Scanner t_scanner, DataHolder t_dataHolder) {
+    public TerminalUserInterface(ProgramLogic t_programLogic, Scanner t_scanner) {
         m_programLogic = t_programLogic;
         m_scanner = t_scanner;
-
-        // DEBUG ONLY, DELETE IT FROM PARAMS!!!
-        m_dataHolder = t_dataHolder;
 
 
         this.clear();
         while(m_isRunning) {
 
-            // TODO add page index or sth ...
             this.menu();
         }
 
@@ -71,44 +65,50 @@ public class TerminalUserInterface implements UserInterface {
     }
 
     private void runPage(String input) {
+        int id;
         Day day;
 
         switch(input) {
-            default:
-                System.out.println("Command not recognized\n\n");
-                break;
             case "0":
             case "exit":
+
                 this.m_isRunning = false;
                 break;
-            case "1":
+            case "1": // read Day
             case "days":
-                this.listDays();
+
+                List<Day> days = m_programLogic.getDays();
+                this.listDays(days);
                 break;
-            case "2":
+            case "2": // read Activity
             case "activities":
-                this.listActivities( new Day(new Date()) );
+                day = new Day( new Date() );
+
+                this.listActivities(day);
                 break;
             case "3": // TODO stats (?)
+
                 System.out.println("TODO stats\n\n");
                 break;
-            case "4": // TODO add new Day()
+            case "4": // create Day
             case "create day":
-                System.out.println("TODO day\n\n");
 
-                Date date = new Date();
-                day = new Day(date);
-                m_dataHolder.addDay(day);
+                System.out.println("TODO day\n\n");
+                m_programLogic.createDay();
 
                 this.runPage("days");
                 break;
-            case "5": // TODO add new Activity()
+            case "5": // create Activity
             case "create activity":
-                System.out.println("TODO activity\n\n");
 
-                int id = 1;
-                Activity activity = new Activity("Some Activity", 100, 999);
-                m_dataHolder.addActivity(id, activity);
+                // TODO get input to define id
+                id = 1;
+
+                System.out.println("TODO activity\n\n");
+                m_programLogic.createActivity(id);
+                break;
+            default:
+                System.out.println("Command not recognized\n\n");
                 break;
         }
     }
@@ -117,9 +117,7 @@ public class TerminalUserInterface implements UserInterface {
     /**
      * Lists all days stored in the data management system
      */
-    protected void listDays() {
-
-        // TODO program logic
+    protected void listDays(List<Day> t_days) {
 
         String msg;
         msg = "Liste aller geplanten Tage\n";
@@ -129,6 +127,8 @@ public class TerminalUserInterface implements UserInterface {
         msg += "xxxx-xx-xx (2 Aktivitäten)\n";
         msg += "xxxx-xx-xx (8 Aktivitäten)\n";
         msg += "xxxx-xx-xx (1 Aktivitäten)\n";
+
+        // TODO generate view by data
 
         msg += "\n";
 

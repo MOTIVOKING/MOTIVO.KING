@@ -3,7 +3,7 @@ package de.oszimt.fa45.motivoking.model;
 /**
  * Created by boerg on 13.10.2016.
  */
-public class Activity {
+public class Activity implements Model {
     private int m_id;
     private String name;
     private int stressLevel;
