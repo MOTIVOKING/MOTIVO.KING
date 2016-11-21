@@ -23,8 +23,8 @@ public class Day implements Model {
     }
 
 
-    public void setId(long id) {
-        id = id;
+    public void setId(long t_id) {
+        id = t_id;
     }
 
 
@@ -38,8 +38,8 @@ public class Day implements Model {
     }
 
 
-    public void setDate(Date date) {
-        date = date;
+    public void setDate(Date t_date) {
+        date = t_date;
     }
 
 
@@ -48,7 +48,7 @@ public class Day implements Model {
     }
 
 
-    public void setActivity(Activity activity) {
-        activities.add(activity);
+    public void setActivity(Activity t_activity) {
+        activities.add(t_activity);
     }
 }

@@ -7,13 +7,13 @@ import java.util.List;
  * Created by RedCyberSamurai on 21.10.2016.
  */
 public class JsonData implements Model {
-    private int m_dayAI = 0;
-    private int m_activityAI = 0;
+    private int dayAI = 0;
+    private int activityAI = 0;
 
-    private List<Day> m_days;
+    private List<Day> days;
 
     public JsonData() {
-        m_days = new ArrayList<Day>();
+        days = new ArrayList<Day>();
     }
 
 
@@ -25,12 +25,12 @@ public class JsonData implements Model {
                 System.out.printf("AI of table %s not found.", s);
                 break;
             case "day":
-                m_dayAI++;
-                ai = m_dayAI;
+                dayAI++;
+                ai = dayAI;
                 break;
             case "activity":
-                m_activityAI++;
-                ai = m_activityAI;
+                activityAI++;
+                ai = activityAI;
                 break;
         }
 
@@ -39,6 +39,6 @@ public class JsonData implements Model {
 
 
     public List<Day> getDays() {
-        return m_days;
+        return days;
     }
 }

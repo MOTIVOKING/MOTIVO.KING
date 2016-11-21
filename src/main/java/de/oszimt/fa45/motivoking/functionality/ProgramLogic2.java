@@ -13,43 +13,43 @@ import java.util.List;
  * Created by RedCyberSamurai on 17.10.2016.
  */
 public class ProgramLogic2 implements ProgramLogic {
-    private DataHolder m_dataHolder;
+    private DataHolder mDataHolder;
 
-    private Controller m_dayController;
-    private Controller m_activityController;
+    private Controller mDayController;
+    private Controller mActivityController;
 
     public ProgramLogic2(DataHolder t_dataHolder) {
-        m_dataHolder = t_dataHolder;
+        mDataHolder = t_dataHolder;
 
-        m_dayController = new DayController();
-        m_activityController = new ActivityController();
+        mDayController = new DayController();
+        mActivityController = new ActivityController();
     }
 
     public void createDay() {
-        Day day = m_dayController.create();
-        m_dataHolder.addDay(day);
+        Day day = mDayController.create();
+        mDataHolder.addDay(day);
     }
 
 
-    public void createActivity(int id) {
+    public void createActivity(int t_id) {
         // TODO assign activity to a selected day
 
-        Activity activity = m_activityController.create();
-        m_dataHolder.addActivity(activity.getId(), activity);
+        Activity activity = mActivityController.create();
+        mDataHolder.addActivity(activity.getId(), activity);
     }
 
 
-    public Day getDay(int id) {
-        return m_dataHolder.findDayById(id);
+    public Day getDay(int t_id) {
+        return mDataHolder.findDayById(t_id);
     }
 
 
     public List<Day> getDays() {
-        return m_dataHolder.findAllDays();
+        return mDataHolder.findAllDays();
     }
 
 
-    public List<Activity> getActivities(int id) {
-        return m_dataHolder.findActivitiesByDayId(id);
+    public List<Activity> getActivities(int t_id) {
+        return mDataHolder.findActivitiesByDayId(t_id);
     }
 }

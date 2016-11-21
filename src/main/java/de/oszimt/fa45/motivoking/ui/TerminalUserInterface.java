@@ -11,11 +11,11 @@ import java.util.Scanner;
  * Created by RedCyberSamurai on 17.10.2016.
  */
 public class TerminalUserInterface implements UserInterface {
-    private Scanner m_scanner;
+    private Scanner mScanner;
 
-    private ProgramLogic m_programLogic;
+    private ProgramLogic mProgramLogic;
 
-    private boolean m_isRunning = true;
+    private boolean mIsRunning = true;
 
 
     /**
@@ -24,17 +24,17 @@ public class TerminalUserInterface implements UserInterface {
      * @param t_scanner
      */
     public TerminalUserInterface(ProgramLogic t_programLogic, Scanner t_scanner) {
-        m_programLogic = t_programLogic;
-        m_scanner = t_scanner;
+        mProgramLogic = t_programLogic;
+        mScanner = t_scanner;
 
 
         this.clear();
-        while(m_isRunning) {
+        while(mIsRunning) {
 
             this.menu();
         }
 
-        m_scanner.close();
+        mScanner.close();
         System.out.println("Programm beendet.");
     }
 
@@ -58,7 +58,7 @@ public class TerminalUserInterface implements UserInterface {
 
         System.out.println(msg);
 
-        String input = m_scanner.next();
+        String input = mScanner.next();
 
         this.clear();
         this.runPage(input);
@@ -72,12 +72,12 @@ public class TerminalUserInterface implements UserInterface {
             case "0":
             case "exit":
 
-                this.m_isRunning = false;
+                this.mIsRunning = false;
                 break;
             case "1": // read Day
             case "days":
 
-                List<Day> days = m_programLogic.getDays();
+                List<Day> days = mProgramLogic.getDays();
                 this.listDays(days);
                 break;
             case "2": // read Activity
@@ -94,7 +94,7 @@ public class TerminalUserInterface implements UserInterface {
             case "create day":
 
                 System.out.println("TODO day\n\n");
-                m_programLogic.createDay();
+                mProgramLogic.createDay();
 
                 this.runPage("days");
                 break;
@@ -105,7 +105,7 @@ public class TerminalUserInterface implements UserInterface {
                 id = 1;
 
                 System.out.println("TODO activity\n\n");
-                m_programLogic.createActivity(id);
+                mProgramLogic.createActivity(id);
                 break;
             default:
                 System.out.println("Command not recognized\n\n");

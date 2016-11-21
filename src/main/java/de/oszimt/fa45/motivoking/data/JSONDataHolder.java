@@ -3,7 +3,6 @@ package de.oszimt.fa45.motivoking.data;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import de.oszimt.fa45.motivoking.data.DataHolder;
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
 import de.oszimt.fa45.motivoking.model.JsonData;
@@ -23,15 +22,15 @@ public class JSONDataHolder implements DataHolder {
     private final String FILE_NAME = "testfile.json";
 
     // available members
-    private JsonData m_data;
-    private Gson m_gson;
-    private List<Day> m_days;
+    private JsonData mData;
+    private Gson mGson;
+    private List<Day> mDays;
 
     public JSONDataHolder() {
-        m_gson = new Gson();
+        mGson = new Gson();
 
-        m_data = this.read();
-        m_days = m_data.getDays();
+        mData = this.read();
+        mDays = mData.getDays();
     }
 
 
@@ -56,7 +55,7 @@ public class JSONDataHolder implements DataHolder {
             JsonReader jReader = new JsonReader(fReader);
 
             Type dataType = new TypeToken<JsonData>(){}.getType();
-            data = m_gson.fromJson(jReader, dataType);
+            data = mGson.fromJson(jReader, dataType);
 
             jReader.close();
             fReader.close();
@@ -101,7 +100,7 @@ public class JSONDataHolder implements DataHolder {
             return null;
         }
 
-        Day t_day = m_days.stream().filter(day -> day.getId() == t_dayId).findFirst().orElse(null);
+        Day t_day = mDays.stream().filter(day -> day.getId() == t_dayId).findFirst().orElse(null);
 
         return t_day;
     }
@@ -113,7 +112,7 @@ public class JSONDataHolder implements DataHolder {
      */
     @Override
     public List<Day> findAllDays() {
-        return m_days;
+        return mDays;
     }
 
 
@@ -145,11 +144,11 @@ public class JSONDataHolder implements DataHolder {
 
         if(t_day != null) {
             Day day = t_day;
-            day.setId( m_data.getAI("day") );
-            m_days.add(day);
+            day.setId( mData.getAI("day") );
+            mDays.add(day);
             System.out.println("Day added (" + day.getDate().toString() +  ")");
 
-            this.write( m_gson.toJson(m_data) );
+            this.write( mGson.toJson(mData) );
         } else {
             System.out.println("Error: Could not add day.\n");
         }
@@ -168,10 +167,10 @@ public class JSONDataHolder implements DataHolder {
             Day day = this.findDayById(t_dayId);
 
             if(day != null) {
-                t_activity.setId( m_data.getAI("activity") );
+                t_activity.setId( mData.getAI("activity") );
                 day.setActivity(t_activity);
 
-                this.write( m_gson.toJson(m_data) );
+                this.write( mGson.toJson(mData) );
 
                 System.out.println("Activity: " + t_activity.getName() +
                         ", Stress: " + t_activity.getStressLevel() +
