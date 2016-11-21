@@ -49,9 +49,4 @@ public class ProgramLogic1 implements ProgramLogic{
     public List<Activity> getActivities(int id) {
         return m_dataHolder.findActivitiesByDayId(id);
     }
-
-    @Override
-    public List<Day> getDays() {
-        return null;
-    }
 }
