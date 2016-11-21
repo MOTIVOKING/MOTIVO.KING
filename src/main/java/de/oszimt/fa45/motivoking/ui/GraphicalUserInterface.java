@@ -5,7 +5,6 @@ import de.oszimt.fa45.motivoking.model.Day;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,47 +23,47 @@ import java.util.ResourceBundle;
  * Created by boerg on 13.10.2016.
  */
 public class GraphicalUserInterface extends Application implements UserInterface, Initializable {
-    private static GraphicalUserInterface instance;
-    private Stage primaryStage;
-    private ProgramLogic programLogic;
+    private static ProgramLogic mProgramLogic;
 
+    private Stage primaryStage;
     @FXML private TableView<Day> tv_dates;
     @FXML private TableColumn<Day, String> column_date;
 
+
     public GraphicalUserInterface() {
-        this.instance = this;
-//        this.programLogic = programLogic;
-//        Application.launch();
-//        this.launch();
+        System.out.println("GUI::construct");
     }
 
-    public static GraphicalUserInterface getInstance() {
-        return instance;
+
+    public static void setProgramLogic(ProgramLogic programLogic) {
+        mProgramLogic = programLogic;
     }
 
-    public void setProgramLogic(ProgramLogic programLogic) {
-        this.programLogic = programLogic;
-    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        System.out.println("Graphical User Interface started");
+        System.out.println("GUI::start");
         this.primaryStage = primaryStage;
+
         initRootLayout();
         initDays();
     }
 
+
     private void initDays() {
-        ObservableList<Day> l = FXCollections.observableArrayList();
-        l.addAll(programLogic.getDays());
-        tv_dates.setItems(l);
+        ObservableList<Day> list = FXCollections.observableArrayList();
+
+        list.addAll(mProgramLogic.getDays());
+        tv_dates.setItems(list);
     }
+
 
     private void initRootLayout() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("GraphicalUserInterface.fxml"));
             AnchorPane root = loader.load();
+
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setTitle("MOTIVO.KING");
@@ -74,30 +73,39 @@ public class GraphicalUserInterface extends Application implements UserInterface
         }
     }
 
+
     @FXML
     private void onAddDay(ActionEvent actionEvent) {
         Alert dateInput = new Alert(Alert.AlertType.NONE);
+
         DialogPane dialogPane = new DialogPane();
         DatePicker datePicker = new DatePicker();
+
         dialogPane.getChildren().add(datePicker);
         dateInput.setDialogPane(dialogPane);
         dateInput.showAndWait();
     }
 
+
     @FXML
     private void onAddAction(ActionEvent actionEvent) {
     }
+
 
     @FXML
     private void onRemoveAction(ActionEvent actionEvent) {
     }
 
+
     @FXML
     private void onChangeAction(ActionEvent actionEvent) {
     }
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        column_date.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate().toString()));
+        column_date.setCellValueFactory(
+                cellData -> new SimpleStringProperty( cellData.getValue().getDate().toString() )
+        );
     }
 }

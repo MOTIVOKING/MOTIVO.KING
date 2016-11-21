@@ -11,6 +11,7 @@ import de.oszimt.fa45.motivoking.ui.TerminalUserInterface;
 import de.oszimt.fa45.motivoking.ui.UserInterface;
 import de.oszimt.fa45.motivoking.ui.GraphicalUserInterface;
 import javafx.application.Application;
+import javafx.stage.Stage;
 
 import java.util.Scanner;
 
@@ -178,10 +179,9 @@ public class Launcher {
             case "GUI":
             case "gui":
             case "Gui":
-//                mUserInterface = new GraphicalUserInterface(mProgramLogic);
-//                GraphicalUserInterface graphicalUserInterface = new GraphicalUserInterface();
+                GraphicalUserInterface.setProgramLogic(mProgramLogic);
                 Application.launch(GraphicalUserInterface.class);
-                GraphicalUserInterface.getInstance().setProgramLogic(mProgramLogic);
+
                 System.out.println(" -> GUI");
                 break;
             case "2":
