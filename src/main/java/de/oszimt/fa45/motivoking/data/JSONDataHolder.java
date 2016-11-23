@@ -27,9 +27,12 @@ public class JSONDataHolder implements DataHolder {
     private List<Day> mDays;
 
     public JSONDataHolder() {
+        // json container
         mGson = new Gson();
 
+        // data to work with
         mData = this.read();
+        // list of days
         mDays = mData.getDays();
     }
 
@@ -41,6 +44,7 @@ public class JSONDataHolder implements DataHolder {
     private JsonData read() {
         JsonData data = null;
 
+        // create the file if not existent
         File file = new File(FILE_NAME);
         if ( !file.exists() ) {
             try {
@@ -50,6 +54,7 @@ public class JSONDataHolder implements DataHolder {
             }
         }
 
+        // fetch the data of the file
         try {
             FileReader fReader = new FileReader(FILE_NAME);
             JsonReader jReader = new JsonReader(fReader);
@@ -63,6 +68,7 @@ public class JSONDataHolder implements DataHolder {
             e.printStackTrace();
         }
 
+        // initialize data model if not set
         if(data == null) {
             data = new JsonData();
         }
@@ -73,9 +79,10 @@ public class JSONDataHolder implements DataHolder {
 
     /**
      * Saves the changes made.
-     * @param in
+     * @param in    The json string to write to the file.
      */
     private void write(String in) {
+
         try {
             FileWriter fWriter = new FileWriter(FILE_NAME);
 
@@ -100,9 +107,7 @@ public class JSONDataHolder implements DataHolder {
             return null;
         }
 
-        Day t_day = mDays.stream().filter(day -> day.getId() == t_dayId).findFirst().orElse(null);
-
-        return t_day;
+        return mDays.stream().filter(day -> day.getId() == t_dayId).findFirst().orElse(null);
     }
 
 
@@ -137,7 +142,7 @@ public class JSONDataHolder implements DataHolder {
 
     /**
      * Adds a day to the JSON file.
-     * @param t_day
+     * @param t_day    The day to add.
      */
     @Override
     public void addDay(Day t_day) {
