@@ -1,55 +1,83 @@
 package de.oszimt.fa45.motivoking.functionality;
 
-import de.oszimt.fa45.motivoking.controller.ActivityController;
-import de.oszimt.fa45.motivoking.controller.Controller;
-import de.oszimt.fa45.motivoking.controller.DayController;
 import de.oszimt.fa45.motivoking.data.DataHolder;
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by RedCyberSamurai on 17.10.2016.
  */
 public class ProgramLogic2 implements ProgramLogic {
-    private DataHolder mDataHolder;
 
-    private Controller mDayController;
-    private Controller mActivityController;
+    private DataHolder mDataHolder;
 
     public ProgramLogic2(DataHolder t_dataHolder) {
         mDataHolder = t_dataHolder;
-
-        mDayController = new DayController();
-        mActivityController = new ActivityController();
     }
 
+
+    /**
+     * Creates a day.
+     */
     public void createDay() {
-        Day day = mDayController.create();
+        Date date = new Date();
+        Day day = new Day(date);
+
         mDataHolder.addDay(day);
     }
 
 
-    public void createActivity(int t_id) {
-        // TODO assign activity to a selected day
+    @Override
+    public void createDay(String dateString) {
 
-        Activity activity = mActivityController.create();
-        mDataHolder.addActivity(activity.getId(), activity);
+    }
+
+    /**
+     * Creates an activity to a specified day.
+     * @param id    Id of the day.
+     */
+    public void createActivity(int id) {
+        Activity activity = new Activity("Some Activity", 100, 999);
+
+        mDataHolder.addActivity(id, activity);
+        System.out.printf("Added activity id: %s\n", activity.getId());
     }
 
 
-    public Day getDay(int t_id) {
-        return mDataHolder.findDayById(t_id);
+    /**
+     * Gets a day by a specified id.
+     * @param id
+     * @return
+     */
+    public Day getDay(int id) {
+        return mDataHolder.findDayById(id);
     }
 
 
+    /**
+     * Returns a list of days.
+     * @return
+     */
     public List<Day> getDays() {
-        return mDataHolder.findAllDays();
+        List<Day> days = new ArrayList<>();
+        days.add(new Day(new Date(2016, 05, 11)));
+        days.add(new Day(new Date(2016, 11, 16)));
+        return days;
+
+        // return mDataHolder.findAllDays();
     }
 
 
-    public List<Activity> getActivities(int t_id) {
-        return mDataHolder.findActivitiesByDayId(t_id);
+    /**
+     * Returns a list of activities by a specified day.
+     * @param id    Id of the day.
+     * @return
+     */
+    public List<Activity> getActivities(int id) {
+        return mDataHolder.findActivitiesByDayId(id);
     }
 }

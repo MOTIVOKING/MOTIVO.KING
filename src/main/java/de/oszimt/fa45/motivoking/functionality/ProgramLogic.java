@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface ProgramLogic {
     
-    void createDay();
+    void createDay(String dateString);
     void createActivity(int id);
     Day getDay(int id);
     List<Day> getDays();

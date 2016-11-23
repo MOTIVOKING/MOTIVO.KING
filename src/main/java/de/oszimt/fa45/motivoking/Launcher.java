@@ -6,7 +6,6 @@ import de.oszimt.fa45.motivoking.data.SqLiteDataHolder;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic1;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic2;
-import de.oszimt.fa45.motivoking.functionality.StubLogic;
 import de.oszimt.fa45.motivoking.ui.TerminalUserInterface;
 import de.oszimt.fa45.motivoking.ui.UserInterface;
 import de.oszimt.fa45.motivoking.ui.GraphicalUserInterface;
@@ -160,7 +159,6 @@ public class Launcher {
                 System.out.println(" -> Fachkonzept 2");
                 break;
         }
-        mProgramLogic = new StubLogic();
     }
 
 
@@ -177,6 +175,9 @@ public class Launcher {
             case "GUI":
             case "gui":
             case "Gui":
+                // we do not need the scanner in the gui
+                mScanner.close();
+
                 mUserInterface = new GraphicalUserInterface(mProgramLogic);
                 System.out.println(" -> GUI");
                 break;
