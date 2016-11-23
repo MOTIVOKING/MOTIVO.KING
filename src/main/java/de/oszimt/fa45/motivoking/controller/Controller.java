@@ -1,4 +1,4 @@
-package de.oszimt.fa45.motivoking.Controller;
+package de.oszimt.fa45.motivoking.controller;
 
 /**
  * Created by RedCyberSamurai on 17.11.2016.

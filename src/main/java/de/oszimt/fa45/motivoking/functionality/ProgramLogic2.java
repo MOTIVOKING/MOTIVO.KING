@@ -1,8 +1,8 @@
 package de.oszimt.fa45.motivoking.functionality;
 
-import de.oszimt.fa45.motivoking.Controller.ActivityController;
-import de.oszimt.fa45.motivoking.Controller.Controller;
-import de.oszimt.fa45.motivoking.Controller.DayController;
+import de.oszimt.fa45.motivoking.controller.ActivityController;
+import de.oszimt.fa45.motivoking.controller.Controller;
+import de.oszimt.fa45.motivoking.controller.DayController;
 import de.oszimt.fa45.motivoking.data.DataHolder;
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;

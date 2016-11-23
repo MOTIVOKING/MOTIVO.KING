@@ -1,4 +1,4 @@
-package de.oszimt.fa45.motivoking.Controller;
+package de.oszimt.fa45.motivoking.controller;
 
 import de.oszimt.fa45.motivoking.model.Day;
 
