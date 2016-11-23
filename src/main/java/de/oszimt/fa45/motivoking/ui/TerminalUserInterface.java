@@ -24,9 +24,10 @@ public class TerminalUserInterface implements UserInterface {
      * @param t_scanner
      */
     public TerminalUserInterface(ProgramLogic t_programLogic, Scanner t_scanner) {
+        // initializing program logic
         mProgramLogic = t_programLogic;
+        // initializing input reader
         mScanner = t_scanner;
-
 
         this.clear();
         while(mIsRunning) {
@@ -64,6 +65,7 @@ public class TerminalUserInterface implements UserInterface {
         this.runPage(input);
     }
 
+
     private void runPage(String input) {
         int id;
         Day day;
@@ -71,13 +73,12 @@ public class TerminalUserInterface implements UserInterface {
         switch(input) {
             case "0":
             case "exit":
-
                 this.mIsRunning = false;
                 break;
             case "1": // read Day
             case "days":
-
                 List<Day> days = mProgramLogic.getDays();
+
                 this.listDays(days);
                 break;
             case "2": // read Activity
@@ -87,25 +88,24 @@ public class TerminalUserInterface implements UserInterface {
                 this.listActivities(day);
                 break;
             case "3": // TODO stats (?)
-
                 System.out.println("TODO stats\n\n");
                 break;
             case "4": // create Day
             case "create day":
-
-                System.out.println("TODO day\n\n");
-                mProgramLogic.createDay();
+                System.out.println("Type in your date in the following format: YYYY-mm-dd\n\n");
+                String date = mScanner.next();
+                System.out.println(date);
+                mProgramLogic.createDay(date);
 
                 this.runPage("days");
                 break;
             case "5": // create Activity
             case "create activity":
+                System.out.println("Type in the id of the day you want to add the activity:\n\n");
+                id = mScanner.nextInt();
 
-                // TODO get input to define id
-                id = 1;
-
-                System.out.println("TODO activity\n\n");
                 mProgramLogic.createActivity(id);
+                this.runPage("days");
                 break;
             default:
                 System.out.println("Command not recognized\n\n");
