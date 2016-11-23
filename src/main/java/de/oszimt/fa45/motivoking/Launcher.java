@@ -6,10 +6,10 @@ import de.oszimt.fa45.motivoking.data.SqLiteDataHolder;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic1;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic2;
+import de.oszimt.fa45.motivoking.functionality.StubLogic;
 import de.oszimt.fa45.motivoking.ui.TerminalUserInterface;
 import de.oszimt.fa45.motivoking.ui.UserInterface;
 import de.oszimt.fa45.motivoking.ui.GraphicalUserInterface;
-import javafx.application.Application;
 
 import java.util.Scanner;
 
@@ -92,6 +92,7 @@ public class Launcher {
         return question;
     }
 
+
     /**
      * Get option for the required component
      * @param index
@@ -159,6 +160,7 @@ public class Launcher {
                 System.out.println(" -> Fachkonzept 2");
                 break;
         }
+        mProgramLogic = new StubLogic();
     }
 
 
@@ -175,11 +177,7 @@ public class Launcher {
             case "GUI":
             case "gui":
             case "Gui":
-//                mUserInterface = new GraphicalUserInterface(mProgramLogic);
-//                GraphicalUserInterface graphicalUserInterface = new GraphicalUserInterface();
-                Application.launch(GraphicalUserInterface.class);
-                GraphicalUserInterface.getInstance().setProgramLogic(mProgramLogic);
-//                GraphicalUserInterface.getInstance().initUi();
+                mUserInterface = new GraphicalUserInterface(mProgramLogic);
                 System.out.println(" -> GUI");
                 break;
             case "2":
