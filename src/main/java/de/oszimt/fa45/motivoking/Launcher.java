@@ -10,8 +10,6 @@ import de.oszimt.fa45.motivoking.functionality.StubLogic;
 import de.oszimt.fa45.motivoking.ui.TerminalUserInterface;
 import de.oszimt.fa45.motivoking.ui.UserInterface;
 import de.oszimt.fa45.motivoking.ui.GraphicalUserInterface;
-import javafx.application.Application;
-import javafx.stage.Stage;
 
 import java.util.Scanner;
 
@@ -179,16 +177,13 @@ public class Launcher {
             case "GUI":
             case "gui":
             case "Gui":
-                GraphicalUserInterface.setProgramLogic(mProgramLogic);
-                Application.launch(GraphicalUserInterface.class);
-
+                mUserInterface = new GraphicalUserInterface(mProgramLogic);
                 System.out.println(" -> GUI");
                 break;
             case "2":
             case "TUI":
             case "tui":
             case "Tui":
-                // TODO mDataHolder -> to mProgramLogic; delete last param
                 mUserInterface = new TerminalUserInterface(mProgramLogic, mScanner);
                 System.out.println(" -> TUI");
                 break;
