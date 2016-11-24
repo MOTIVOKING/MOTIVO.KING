@@ -5,7 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
-import de.oszimt.fa45.motivoking.model.JsonData;
+import de.oszimt.fa45.motivoking.data.type.JsonData;
 
 import java.io.File;
 import java.io.FileReader;
