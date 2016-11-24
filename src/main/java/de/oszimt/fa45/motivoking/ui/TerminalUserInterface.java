@@ -22,8 +22,8 @@ public class TerminalUserInterface implements UserInterface {
 
     /**
      * Initialize the terminal with its needed components
-     * @param t_programLogic
-     * @param t_scanner
+     * @param t_programLogic    The program logic to use.
+     * @param t_scanner         The input reader.
      */
     public TerminalUserInterface(ProgramLogic t_programLogic, Scanner t_scanner) {
         // initializing program logic
