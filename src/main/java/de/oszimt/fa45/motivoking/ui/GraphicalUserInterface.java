@@ -12,12 +12,6 @@ public class GraphicalUserInterface implements UserInterface {
     private static ProgramLogic mProgramLogic;
 
 
-    public GraphicalUserInterface() {
-        System.out.println("Error: Invalid GUI access ::GraphicalUserInterface");
-        System.exit(1);
-    }
-
-
     /**
      * GUI constructor, launching the window app.
      * @param t_programLogic    Program logic to work with
