@@ -40,9 +40,7 @@ public class ProgramLogic2 implements ProgramLogic {
      * Creates an activity to a specified day.
      * @param id    Id of the day.
      */
-    public void createActivity(int id) {
-        Activity activity = new Activity("Some Activity", 100, 999);
-
+    public void createActivity(long id, Activity activity) {
         mDataHolder.addActivity(id, activity);
         System.out.printf("Added activity id: %s\n", activity.getId());
     }
@@ -53,7 +51,7 @@ public class ProgramLogic2 implements ProgramLogic {
      * @param id
      * @return
      */
-    public Day getDay(int id) {
+    public Day getDay(long id) {
         return mDataHolder.findDayById(id);
     }
 
@@ -77,7 +75,7 @@ public class ProgramLogic2 implements ProgramLogic {
      * @param id    Id of the day.
      * @return
      */
-    public List<Activity> getActivities(int id) {
+    public List<Activity> getActivities(long id) {
         return mDataHolder.findActivitiesByDayId(id);
     }
 }

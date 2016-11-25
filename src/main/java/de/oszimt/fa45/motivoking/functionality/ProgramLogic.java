@@ -11,8 +11,8 @@ import java.util.List;
 public interface ProgramLogic {
     
     void createDay(String dateString);
-    void createActivity(int id);
-    Day getDay(int id);
+    void createActivity(long id, Activity activity);
+    Day getDay(long id);
     List<Day> getDays();
-    List<Activity> getActivities(int id);
+    List<Activity> getActivities(long id);
 }

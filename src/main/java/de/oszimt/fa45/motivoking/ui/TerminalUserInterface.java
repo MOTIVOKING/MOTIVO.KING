@@ -1,10 +1,11 @@
 package de.oszimt.fa45.motivoking.ui;
 
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
+import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
+import de.oszimt.fa45.motivoking.Error;
 import de.oszimt.fa45.motivoking.ui.terminal.View;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -35,12 +36,11 @@ public class TerminalUserInterface implements UserInterface {
 
         mView.clear();
         while(mIsRunning) {
-
+            Error.print(mView);
             mView.menu();
 
             String input = mScanner.next();
 
-            mView.clear();
             this.runPage(input);
         }
 
@@ -54,49 +54,74 @@ public class TerminalUserInterface implements UserInterface {
      * @param input    String for choosing the page.
      */
     private void runPage(String input) {
-        int id;
+        long id;
         Day day;
+        Activity activity;
+        List<Day> days = mProgramLogic.getDays();
 
+        mView.clear();
         switch(input) {
             case "0":
             case "exit":
                 this.mIsRunning = false;
                 break;
-            case "1": // read Day
+            case "1": // --- listing the days ---
             case "days":
-                List<Day> days = mProgramLogic.getDays();
-
                 mView.listDays(days);
                 break;
-            case "2": // read Activity
+            case "2": // --- listing the activities ---
             case "activities":
-                day = new Day( new Date() );
+                mView.printDaysTable(days);
 
+                System.out.println( mView.chooseDay() );
+                id = mScanner.nextLong();
+                day = days.stream().filter(d -> d.getId() == id).findFirst().orElse(null);
+
+                mView.clear();
                 mView.listActivities(day);
                 break;
             case "3": // TODO stats (?)
                 System.out.println("TODO stats\n\n");
                 break;
-            case "4": // create Day
+            case "4": // --- creating the day ---
             case "create day":
-                System.out.println("Type in your date in the following format: YYYY-mm-dd\n\n");
+                System.out.println( mView.createDay() );
                 String date = mScanner.next();
-                System.out.println(date);
+
                 mProgramLogic.createDay(date);
 
                 this.runPage("days");
                 break;
-            case "5": // create Activity
+            case "5": // --- creating the activity ---
             case "create activity":
-                System.out.println("Type in the id of the day you want to add the activity:\n\n");
-                id = mScanner.nextInt();
+                System.out.println( mView.chooseDay() );
+                mView.printDaysTable(days);
+                id = mScanner.nextLong();
 
-                mProgramLogic.createActivity(id);
+                if( days.stream().anyMatch(d -> d.getId() ==  id) ) {
+                    System.out.println( mView.chooseActivityName() );
+                    mScanner.nextLine(); // wtf java ?!!!
+                    String name = mScanner.nextLine();
+
+                    System.out.println( mView.chooseStressLevel() );
+                    int stressLevel = mScanner.nextInt();
+
+                    System.out.println( mView.chooseRelaxLevel() );
+                    int relaxLevel = mScanner.nextInt();
+
+                    activity = new Activity(name, stressLevel, relaxLevel);
+                    mProgramLogic.createActivity(id, activity);
+                } else {
+                    Error.set("Error: Day ID not found!");
+                }
+
                 this.runPage("days");
                 break;
-            default:
-                System.out.println("Command not recognized\n\n");
+            default: // --- input not recognized ---
+                Error.set("Command not recognized");
                 break;
         }
+
     }
+
 }

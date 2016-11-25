@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonReader;
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
 import de.oszimt.fa45.motivoking.data.type.JsonData;
+import de.oszimt.fa45.motivoking.Error;
 
 import java.io.File;
 import java.io.FileReader;
@@ -103,7 +104,7 @@ public class JSONDataHolder implements DataHolder {
     public Day findDayById(long t_dayId) {
 
         if(t_dayId < 1) {
-            System.out.printf("Day ID %s not found.", t_dayId);
+            Error.set("Day ID " + t_dayId + " not found.");
             return null;
         }
 
@@ -130,7 +131,7 @@ public class JSONDataHolder implements DataHolder {
     public List<Activity> findActivitiesByDayId(long t_dayId) {
 
         if(t_dayId < 1) {
-            System.out.printf("Day ID %s not found.", t_dayId);
+            Error.set("Day ID " + t_dayId + " not found.");
             return null;
         }
 
@@ -155,7 +156,7 @@ public class JSONDataHolder implements DataHolder {
 
             this.write( mGson.toJson(mData) );
         } else {
-            System.out.println("Error: Could not add day.\n");
+            Error.set("Error: Could not add day.");
         }
     }
 
@@ -176,13 +177,8 @@ public class JSONDataHolder implements DataHolder {
                 day.setActivity(t_activity);
 
                 this.write( mGson.toJson(mData) );
-
-                System.out.println("Activity: " + t_activity.getName() +
-                        ", Stress: " + t_activity.getStressLevel() +
-                        ", Relax: " + t_activity.getRelaxLevel()
-                );
             } else {
-                System.out.println("Activity not added. No day found.\n");
+                Error.set("Activity not added. No day found.");
             }
         }
 

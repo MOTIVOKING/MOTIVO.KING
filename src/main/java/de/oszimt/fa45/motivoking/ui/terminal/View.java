@@ -1,8 +1,14 @@
 package de.oszimt.fa45.motivoking.ui.terminal;
 
+import de.oszimt.fa45.motivoking.Error;
+import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by RedCyberSamurai on 24.11.2016.
@@ -10,9 +16,14 @@ import java.util.List;
 public class View {
     // the actual buffer for output
     private String msg;
+    private static final int WIDTH = 78;
+
+    private DateFormat dateFormat;
 
     public View() {
+
         msg = "";
+        dateFormat = new SimpleDateFormat("YYYY-mm-dd", Locale.GERMANY);
     }
 
 
@@ -23,12 +34,12 @@ public class View {
         clearBuffer();
 
         msg += "Hauptmenü\n";
-        msg += this.line();
+        msg += this.line("-");
         msg += "\n";
         msg += "1) Tage auflisten\n";
         msg += "2) Aktivitäten auflisten\n";
         msg += "3) Statistik aufrufen\n";
-        msg += this.line();
+        msg += this.line("-");
         msg += "4) Tag hinzufügen\n";
         msg += "5) Aktivität hinzufügen\n";
         msg += "\n";
@@ -42,8 +53,14 @@ public class View {
      * Adds a line to the console
      * @return  A String separator.
      */
-    private String line() {
-        return "---------------------------------------------------------\n";
+    public String line(String t_character) {
+        String s = "";
+        for(int i = 0; i < WIDTH; i++) {
+            s += t_character;
+        }
+
+        s += "\n";
+        return s;
     }
 
 
@@ -78,18 +95,12 @@ public class View {
         clearBuffer();
 
         msg += "Liste aller geplanten Tage\n";
-        msg += this.line();
-        msg += "\n";
-        msg += "xxxx-xx-xx (5 Aktivitäten)\n";
-        msg += "xxxx-xx-xx (2 Aktivitäten)\n";
-        msg += "xxxx-xx-xx (8 Aktivitäten)\n";
-        msg += "xxxx-xx-xx (1 Aktivitäten)\n";
-
-        // TODO generate view by data
-
+        msg += this.line("-");
         msg += "\n";
 
         System.out.println(msg);
+
+        printDaysTable(t_days);
     }
 
 
@@ -98,22 +109,94 @@ public class View {
      * @param day    Day object to use.
      */
     public void listActivities(Day day) {
+        if(day == null) {
+            Error.set("Ungültige Eingabe!");
+            return;
+        }
         clearBuffer();
 
-        // TODO program logic
-
-        msg += "Aktivitäten (Datum: xxxx-xx-xx)\n";
-        msg += this.line();
-        msg += "\n";
-        msg += "Aktivität           |  Stresslevel  |  Entspannungslevel\n";
-        msg += this.line();
-        msg += "Kaffee trinken      |  20           |  2000\n";
-        msg += "Fernsehen           |  500          |  20\n";
-        msg += "Mülleimer ausleeren |  9999         |  0\n";
-        msg += "Pizza bestellen     |  200          |  -10\n";
-        msg += "Computer spielen    |  2000         |  300\n";
-        msg += this.line();
+        msg += "Aktivitäten vom " + dateFormat.format(day.getDate()) + "\n";
+        msg += this.line("-");
 
         System.out.println(msg);
+
+        printActivitiesTable(day);
+    }
+
+    public void printDaysTable(List<Day> t_days) {
+        String tableSetup = "| %-9d | %-50s |\n";
+
+        System.out.format("+-----------+----------------------------------------------------+\n");
+        System.out.format("+ ID        + Datum                                              +\n");
+        System.out.format("+-----------+----------------------------------------------------+\n");
+
+        if(t_days.size() > 0) {
+            for(Day d : t_days) {
+                Date date = d.getDate();
+                String sDate = dateFormat.format(date);
+
+                int numActivities = d.getActivities().size();
+
+                // msg += sDate + " (" + numActivities + " Aktivitäten)\n";
+
+                System.out.format(tableSetup, d.getId(), sDate + " (" + numActivities + " Aktivitäten)");
+            }
+
+            System.out.format("+-----------+----------------------------------------------------+\n\n");
+        } else {
+            msg = "\n --- Die Liste ist leer --- \n\n";
+
+            System.out.println(msg);
+        }
+
+    }
+
+
+    public void printActivitiesTable(Day day) {
+        String tableSetup = "| %-40s | %-11d | %-17d |\n";
+
+        System.out.format("+------------------------------------------+-------------+-------------------+\n");
+        System.out.format("+ Aktivität                                | Stresslevel | Entspannungslevel +\n");
+        System.out.format("+------------------------------------------+-------------+-------------------+\n");
+
+        List<Activity> activities = day.getActivities();
+
+        if(activities.size() > 0) {
+            for(Activity a : activities) {
+                System.out.format(tableSetup, a.getName(), a.getStressLevel(), a.getRelaxLevel());
+            }
+
+            System.out.format("+------------------------------------------+-------------+-------------------+\n\n");
+        } else {
+            msg = "\n --- Keine Aktivität vorhanden --- \n\n";
+
+            System.out.println(msg);
+        }
+
+    }
+
+
+    public String chooseDay() {
+        return "Wähle eine Tag aus [ID]:\n";
+    }
+
+
+    public String createDay() {
+        return "Gib das Datum im folgendem Format ein: YYYY-mm-dd\n\n";
+    }
+
+
+    public String chooseActivityName() {
+        return "Gib den Namen deiner Aktivität an:\n\n";
+    }
+
+
+    public String chooseStressLevel() {
+        return "Gib an, welchen Stresslevel deine Aktivität besitzt (-9999 bis 9999):\n\n";
+    }
+
+
+    public String chooseRelaxLevel() {
+        return "Gib an, welchen Entspannungslevel deine Aktivität besitzt (-9999 bis 9999):\n\n";
     }
 }

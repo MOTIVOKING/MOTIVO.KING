@@ -3,6 +3,7 @@ package de.oszimt.fa45.motivoking.functionality;
 import de.oszimt.fa45.motivoking.data.DataHolder;
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
+import de.oszimt.fa45.motivoking.Error;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -19,30 +20,31 @@ public class ProgramLogic1 implements ProgramLogic {
     private DataHolder mDataHolder;
 
     public ProgramLogic1(DataHolder t_dataHolder) {
+
         mDataHolder = t_dataHolder;
     }
 
 
     /**
      * Creates a day.
+     * @param dateString    A string of format "YYYY-mm-dd".
      */
     public void createDay(String dateString) {
-        System.out.println("creating day");
+        // NOTE: supporting multiple date formats?
         DateFormat format = new SimpleDateFormat("YYYY-mm-dd", Locale.GERMANY);
-
-        System.out.println("setting date format");
 
         Date date = null;
         try {
             date = format.parse(dateString);
         } catch (ParseException e) {
-            System.out.println("Error: Invalid date format.");
-            e.printStackTrace();
+            Error.set("Error: Invalid date format.");
+            // e.printStackTrace();
         }
-        Day day = new Day(date);
 
-        System.out.println("adding day to database");
-        mDataHolder.addDay(day);
+        if(date != null) {
+            Day day = new Day(date);
+            mDataHolder.addDay(day);
+        }
     }
 
 
@@ -50,8 +52,7 @@ public class ProgramLogic1 implements ProgramLogic {
      * Creates an activity to a specified day.
      * @param id    Id of the day.
      */
-    public void createActivity(int id) {
-        Activity activity = new Activity("Some Activity", 100, 999);
+    public void createActivity(long id, Activity activity) {
 
         mDataHolder.addActivity(id, activity);
         System.out.printf("Added activity id: %s\n", activity.getId());
@@ -60,17 +61,17 @@ public class ProgramLogic1 implements ProgramLogic {
 
     /**
      * Gets a day by a specified id.
-     * @param id
-     * @return
+     * @param id The id of the day.
+     * @return  Returns the found day.
      */
-    public Day getDay(int id) {
+    public Day getDay(long id) {
         return mDataHolder.findDayById(id);
     }
 
 
     /**
      * Returns a list of days.
-     * @return
+     * @return  Day list.
      */
     public List<Day> getDays() {
         return mDataHolder.findAllDays();
@@ -80,9 +81,10 @@ public class ProgramLogic1 implements ProgramLogic {
     /**
      * Returns a list of activities by a specified day.
      * @param id    Id of the day.
-     * @return
+     * @return  Activities list.
      */
-    public List<Activity> getActivities(int id) {
+    public List<Activity> getActivities(long id) {
         return mDataHolder.findActivitiesByDayId(id);
     }
+
 }
