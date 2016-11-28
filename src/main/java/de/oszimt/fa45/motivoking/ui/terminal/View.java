@@ -108,7 +108,7 @@ public class View {
      * Lists all activities of a specific day
      * @param day    Day object to use.
      */
-    public void listActivities(Day day) {
+    public void listActivities(Day day, List<Activity> activities) {
         if(day == null) {
             Error.set("Ungültige Eingabe!");
             return;
@@ -120,7 +120,7 @@ public class View {
 
         System.out.println(msg);
 
-        printActivitiesTable(day);
+        printActivitiesTable(activities);
     }
 
     public void printDaysTable(List<Day> t_days) {
@@ -152,14 +152,12 @@ public class View {
     }
 
 
-    public void printActivitiesTable(Day day) {
+    public void printActivitiesTable(List<Activity> activities) {
         String tableSetup = "| %-40s | %-11d | %-17d |\n";
 
         System.out.format("+------------------------------------------+-------------+-------------------+\n");
         System.out.format("+ Aktivität                                | Stresslevel | Entspannungslevel +\n");
         System.out.format("+------------------------------------------+-------------+-------------------+\n");
-
-        List<Activity> activities = day.getActivities();
 
         if(activities.size() > 0) {
             for(Activity a : activities) {
