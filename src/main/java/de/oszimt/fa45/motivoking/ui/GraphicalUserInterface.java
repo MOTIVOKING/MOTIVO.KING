@@ -47,7 +47,9 @@ public class GraphicalUserInterface extends Application implements UserInterface
     }
 
     public void setProgramLogic(ProgramLogic programLogic) {
+
         this.programLogic = programLogic;
+        System.out.println("######## NOPE ###########");
     }
 
     @Override
