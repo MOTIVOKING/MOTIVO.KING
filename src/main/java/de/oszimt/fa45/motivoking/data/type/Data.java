@@ -2,6 +2,7 @@ package de.oszimt.fa45.motivoking.data.type;
 
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
+import de.oszimt.fa45.motivoking.model.DayActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ public abstract class Data {
 
     private List<Day> days = new ArrayList<>();
     private List<Activity> activities = new ArrayList<>();
+    private List<DayActivity> dayActivities = new ArrayList<>();
 
 
     public List<Day> getDays() {
@@ -21,4 +23,10 @@ public abstract class Data {
 
 
     public List<Activity> getActivities() { return activities; }
+
+
+    public List<DayActivity> getDayActivities() {
+        return dayActivities;
+    }
+
 }

@@ -4,6 +4,7 @@ import de.oszimt.fa45.motivoking.data.DataHolder;
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
 import de.oszimt.fa45.motivoking.Error;
+import de.oszimt.fa45.motivoking.model.DayActivity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -56,7 +57,6 @@ public class ProgramLogic1 implements ProgramLogic {
     public void createActivity(long id, Activity activity) {
 
         mDataHolder.addActivity(id, activity);
-        System.out.printf("Added activity id: %s\n", activity.getId());
     }
 
 
@@ -77,6 +77,12 @@ public class ProgramLogic1 implements ProgramLogic {
     public List<Day> getDays() {
         List<Day> days = mDataHolder.findAllDays();
         return days != null ? days : new ArrayList<>();
+    }
+
+    @Override
+    public List<DayActivity> getDayActivities() {
+        List<DayActivity> dA = mDataHolder.findAllActivities();
+        return dA != null ? dA : new ArrayList<>();
     }
 
 

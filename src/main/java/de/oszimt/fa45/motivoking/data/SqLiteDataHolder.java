@@ -4,6 +4,7 @@ import de.oszimt.fa45.motivoking.Error;
 import de.oszimt.fa45.motivoking.data.type.SqLiteData;
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
+import de.oszimt.fa45.motivoking.model.DayActivity;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -169,6 +170,11 @@ public class SqLiteDataHolder implements DataHolder {
 
     @Override
     public List<Activity> findActivitiesByDayId(long dayId) {
+        return null;
+    }
+
+    @Override
+    public List<DayActivity> findAllActivities() {
         return null;
     }
 

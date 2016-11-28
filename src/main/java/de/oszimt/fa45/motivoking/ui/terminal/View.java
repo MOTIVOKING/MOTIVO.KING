@@ -3,12 +3,14 @@ package de.oszimt.fa45.motivoking.ui.terminal;
 import de.oszimt.fa45.motivoking.Error;
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
+import de.oszimt.fa45.motivoking.model.DayActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * Created by RedCyberSamurai on 24.11.2016.
@@ -91,7 +93,7 @@ public class View {
     /**
      * Lists all days stored in the data management system
      */
-    public void listDays(List<Day> t_days) {
+    public void listDays(List<Day> t_days, List<DayActivity> t_dayActivities) {
         clearBuffer();
 
         msg += "Liste aller geplanten Tage\n";
@@ -100,7 +102,7 @@ public class View {
 
         System.out.println(msg);
 
-        printDaysTable(t_days);
+        printDaysTable(t_days, t_dayActivities);
     }
 
 
@@ -116,14 +118,14 @@ public class View {
         clearBuffer();
 
         msg += "Aktivitäten vom " + dateFormat.format(day.getDate()) + "\n";
-        msg += this.line("-");
+        msg += line("-");
 
         System.out.println(msg);
 
         printActivitiesTable(activities);
     }
 
-    public void printDaysTable(List<Day> t_days) {
+    public void printDaysTable(List<Day> t_days, List<DayActivity> t_dayActivities) {
         String tableSetup = "| %-9d | %-50s |\n";
 
         System.out.format("+-----------+----------------------------------------------------+\n");
@@ -135,9 +137,11 @@ public class View {
                 Date date = d.getDate();
                 String sDate = dateFormat.format(date);
 
-                int numActivities = d.getActivities().size();
+                List<DayActivity> dayActivities = t_dayActivities.stream()
+                        .filter(dA -> dA.getDayId() == d.getId())
+                        .collect(Collectors.toList());
 
-                // msg += sDate + " (" + numActivities + " Aktivitäten)\n";
+                int numActivities = dayActivities.size();
 
                 System.out.format(tableSetup, d.getId(), sDate + " (" + numActivities + " Aktivitäten)");
             }

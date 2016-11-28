@@ -4,6 +4,7 @@ import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
 import de.oszimt.fa45.motivoking.Error;
+import de.oszimt.fa45.motivoking.model.DayActivity;
 import de.oszimt.fa45.motivoking.ui.terminal.View;
 
 import java.util.List;
@@ -58,6 +59,7 @@ public class TerminalUserInterface implements UserInterface {
         Day day;
         Activity activity;
         List<Day> days = mProgramLogic.getDays();
+        List<DayActivity> dayActivities = mProgramLogic.getDayActivities();
 
         mView.clear();
         switch(input) {
@@ -67,11 +69,11 @@ public class TerminalUserInterface implements UserInterface {
                 break;
             case "1": // --- listing the days ---
             case "days":
-                mView.listDays(days);
+                mView.listDays(days, dayActivities);
                 break;
             case "2": // --- listing the activities ---
             case "activities":
-                mView.printDaysTable(days);
+                mView.printDaysTable(days, dayActivities);
 
                 if(days.size() > 0) {
                     System.out.println( mView.chooseDay() );
@@ -98,7 +100,8 @@ public class TerminalUserInterface implements UserInterface {
             case "5": // --- creating the activity ---
             case "create activity":
                 System.out.println( mView.chooseDay() );
-                mView.printDaysTable(days);
+
+                mView.printDaysTable(days, dayActivities);
                 id = mScanner.nextLong();
 
                 if( days.stream().anyMatch(d -> d.getId() ==  id) ) {

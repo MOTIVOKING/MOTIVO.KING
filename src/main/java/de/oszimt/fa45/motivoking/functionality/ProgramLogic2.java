@@ -3,6 +3,7 @@ package de.oszimt.fa45.motivoking.functionality;
 import de.oszimt.fa45.motivoking.data.DataHolder;
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
+import de.oszimt.fa45.motivoking.model.DayActivity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,6 +68,11 @@ public class ProgramLogic2 implements ProgramLogic {
         return days;
 
         // return mDataHolder.findAllDays();
+    }
+
+    @Override
+    public List<DayActivity> getDayActivities() {
+        return null;
     }
 
 

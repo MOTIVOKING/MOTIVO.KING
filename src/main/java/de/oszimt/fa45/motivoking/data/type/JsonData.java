@@ -8,6 +8,7 @@ public class JsonData extends Data {
 
     private long dayAI = 0;
     private long activityAI = 0;
+    private long dayActivityAI = 0;
 
 
     public JsonData() {}
@@ -28,8 +29,12 @@ public class JsonData extends Data {
                 activityAI++;
                 ai = activityAI;
                 break;
+            case "dayActivity":
+                dayActivityAI++;
+                ai = dayActivityAI;
         }
 
         return ai;
     }
+
 }
