@@ -6,6 +6,8 @@ build
 
 testfile.json
 
+.gradle/2.13/taskArtifacts/
+
 # -----------------------------------------------------------------------------------------------------------
 # Created by https://www.gitignore.io/api/intellij
 
