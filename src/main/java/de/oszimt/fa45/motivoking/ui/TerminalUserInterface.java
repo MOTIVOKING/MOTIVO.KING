@@ -36,7 +36,7 @@ public class TerminalUserInterface implements UserInterface {
 
         mView.clear();
         while(mIsRunning) {
-            Error.print(mView);
+            Error.print();
             mView.menu();
 
             String input = mScanner.next();

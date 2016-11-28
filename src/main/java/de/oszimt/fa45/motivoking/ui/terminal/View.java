@@ -53,7 +53,7 @@ public class View {
      * Adds a line to the console
      * @return  A String separator.
      */
-    public String line(String t_character) {
+    public static String line(String t_character) {
         String s = "";
         for(int i = 0; i < WIDTH; i++) {
             s += t_character;
