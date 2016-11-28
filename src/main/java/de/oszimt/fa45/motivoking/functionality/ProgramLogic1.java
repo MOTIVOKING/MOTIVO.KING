@@ -8,6 +8,7 @@ import de.oszimt.fa45.motivoking.Error;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -74,7 +75,7 @@ public class ProgramLogic1 implements ProgramLogic {
      * @return  Day list.
      */
     public List<Day> getDays() {
-        return mDataHolder.findAllDays();
+        return mDataHolder.findAllDays() != null ? mDataHolder.findAllDays() : new ArrayList<>();
     }
 
 
