@@ -91,7 +91,6 @@ public class Launcher {
         return question;
     }
 
-
     /**
      * Get option for the required component
      * @param index
