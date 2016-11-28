@@ -55,19 +55,21 @@ public class GraphicalUserInterface extends Application implements UserInterface
         System.out.println("Graphical User Interface started");
         this.primaryStage = primaryStage;
         initRootLayout();
+    }
+
+    public void initUi() {
         initDays();
     }
 
     private void initDays() {
-//        ObservableList<Day> l = FXCollections.observableArrayList();
-//        l.addAll(programLogic.getDays());
-//        tv_dates.setItems(l);
+        ObservableList<Day> l = FXCollections.observableArrayList();
+        l.addAll(programLogic.getDays());
+        tv_dates.setItems(l);
     }
 
     private void initRootLayout() {
         try {
             FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(GraphicalUserInterface.class.getResource("/de/oszimt/fa45/motivoking/ui/GraphicalUserInterface.fxml"));
             loader.setLocation(getClass().getResource("GraphicalUserInterface.fxml"));
             System.out.println(loader.getLocation());
             AnchorPane root = loader.load();
@@ -104,6 +106,6 @@ public class GraphicalUserInterface extends Application implements UserInterface
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        column_date.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate().toString()));
+
     }
 }

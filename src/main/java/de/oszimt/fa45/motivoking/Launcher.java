@@ -179,6 +179,7 @@ public class Launcher {
 //                GraphicalUserInterface graphicalUserInterface = new GraphicalUserInterface();
                 Application.launch(GraphicalUserInterface.class);
                 GraphicalUserInterface.getInstance().setProgramLogic(mProgramLogic);
+//                GraphicalUserInterface.getInstance().initUi();
                 System.out.println(" -> GUI");
                 break;
             case "2":
