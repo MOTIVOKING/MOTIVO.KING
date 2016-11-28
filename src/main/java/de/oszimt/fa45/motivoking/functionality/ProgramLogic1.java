@@ -75,7 +75,8 @@ public class ProgramLogic1 implements ProgramLogic {
      * @return  Day list.
      */
     public List<Day> getDays() {
-        return mDataHolder.findAllDays() != null ? mDataHolder.findAllDays() : new ArrayList<>();
+        List<Day> days = mDataHolder.findAllDays();
+        return days != null ? days : new ArrayList<>();
     }
 
 
@@ -85,7 +86,8 @@ public class ProgramLogic1 implements ProgramLogic {
      * @return  Activities list.
      */
     public List<Activity> getActivities(long id) {
-        return mDataHolder.findActivitiesByDayId(id);
+        List<Activity> activities = mDataHolder.findActivitiesByDayId(id);
+        return activities != null ? activities : new ArrayList<>();
     }
 
 }
