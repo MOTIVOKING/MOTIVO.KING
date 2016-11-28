@@ -14,6 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by RedCyberSamurai on 17.10.2016.
@@ -25,7 +26,9 @@ public class JSONDataHolder implements DataHolder {
     // available members
     private JsonData mData;
     private Gson mGson;
+
     private List<Day> mDays;
+    private List<Activity> mActivities;
 
     public JSONDataHolder() {
         // json container
@@ -33,8 +36,11 @@ public class JSONDataHolder implements DataHolder {
 
         // data to work with
         mData = this.read();
+
         // list of days
         mDays = mData.getDays();
+        // list of activities
+        mActivities = mData.getActivities();
     }
 
 
@@ -103,7 +109,7 @@ public class JSONDataHolder implements DataHolder {
      */
     public Day findDayById(long t_dayId) {
 
-        if(t_dayId < 1) {
+        if(t_dayId < 1 || mDays.size() < 1) {
             Error.set("Day ID " + t_dayId + " not found.");
             return null;
         }
@@ -130,14 +136,15 @@ public class JSONDataHolder implements DataHolder {
     @Override
     public List<Activity> findActivitiesByDayId(long t_dayId) {
 
-        if(t_dayId < 1) {
+        if(t_dayId < 1 || mDays.size() < 1) {
             Error.set("Day ID " + t_dayId + " not found.");
             return null;
         }
 
         Day t_day = this.findDayById(t_dayId);
 
-        return t_day.getActivities();
+        List<Long> activityIdList = t_day.getActivities();
+        return mActivities.stream().filter(a -> activityIdList.contains(a.getId()) ).collect(Collectors.toList());
     }
 
 
@@ -175,6 +182,7 @@ public class JSONDataHolder implements DataHolder {
             if(day != null) {
                 t_activity.setId( mData.getAI("activity") );
                 day.setActivity(t_activity);
+                mActivities.add(t_activity);
 
                 this.write( mGson.toJson(mData) );
             } else {

@@ -73,12 +73,15 @@ public class TerminalUserInterface implements UserInterface {
             case "activities":
                 mView.printDaysTable(days);
 
-                System.out.println( mView.chooseDay() );
-                id = mScanner.nextLong();
-                day = days.stream().filter(d -> d.getId() == id).findFirst().orElse(null);
+                if(days.size() > 0) {
+                    System.out.println( mView.chooseDay() );
+                    id = mScanner.nextLong();
+                    day = days.stream().filter(d -> d.getId() == id).findFirst().orElse(null);
 
-                mView.clear();
-                mView.listActivities(day);
+                    mView.clear();
+                    mView.listActivities(day, mProgramLogic.getActivities(id));
+                }
+
                 break;
             case "3": // TODO stats (?)
                 System.out.println("TODO stats\n\n");

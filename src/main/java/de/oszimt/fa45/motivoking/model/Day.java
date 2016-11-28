@@ -10,7 +10,7 @@ import java.util.List;
 public class Day extends Model {
 
     private Date date;
-    private List<Activity> activities;
+    private List<Long> activities;
 
 
     /**
@@ -54,16 +54,16 @@ public class Day extends Model {
      * Returns a list of activities of the day.
      * @return  Collection of activities of the day.
      */
-    public List<Activity> getActivities() {
+    public List<Long> getActivities() {
         return activities;
     }
 
 
     /**
-     * Adds an activity to the day.
+     * Adds an activity to the day. Does only add the id referencing the activity.
      * @param t_activity    The activity to add.
      */
     public void setActivity(Activity t_activity) {
-        activities.add(t_activity);
+        activities.add( t_activity.getId() );
     }
 }

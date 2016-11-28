@@ -1,5 +1,6 @@
 package de.oszimt.fa45.motivoking.data.type;
 
+import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
 
 import java.util.ArrayList;
@@ -14,10 +15,13 @@ public class JsonData extends Data {
     private long activityAI = 0;
 
     private List<Day> days;
+    private List<Activity> activities;
 
 
     public JsonData() {
+
         days = new ArrayList<>();
+        activities = new ArrayList<>();
     }
 
 
@@ -45,4 +49,6 @@ public class JsonData extends Data {
     public List<Day> getDays() {
         return days;
     }
+
+    public List<Activity> getActivities() { return activities; }
 }
