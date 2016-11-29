@@ -105,7 +105,7 @@ public class Launcher {
         }
 
         System.out.println( this.getQuestion(index) );
-        return mScanner.next();
+        return mScanner.nextLine();
     }
 
 
