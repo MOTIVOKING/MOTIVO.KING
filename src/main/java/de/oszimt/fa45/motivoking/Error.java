@@ -10,6 +10,9 @@ import java.util.List;
  */
 public class Error {
 
+    private static final int MAX_TITLE_LENGTH = 74;
+    private static final int MAX_MESSAGE_LENGTH = 72;
+
     private static List<String> errors = new ArrayList<>();
 
 
@@ -47,8 +50,8 @@ public class Error {
         List<String> errors = get();
 
         if(errors.size() > 0) {
-            String errorTitle = "# %-74s #\n";
-            String errorMessage = "# > %-72s #\n";
+            String errorTitle = "# %-" + MAX_TITLE_LENGTH + "s #\n";
+            String errorMessage = "# > %-" + MAX_MESSAGE_LENGTH + "s #\n";
 
             System.out.print( View.line("#") );
             System.out.format(errorTitle, "Errors:");
