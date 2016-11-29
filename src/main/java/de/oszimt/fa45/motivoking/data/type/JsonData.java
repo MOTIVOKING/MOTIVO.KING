@@ -1,6 +1,8 @@
 package de.oszimt.fa45.motivoking.data.type;
 
 
+import de.oszimt.fa45.motivoking.Error;
+
 /**
  * Created by RedCyberSamurai on 21.10.2016.
  */
@@ -8,7 +10,6 @@ public class JsonData extends Data {
 
     private long dayAI = 0;
     private long activityAI = 0;
-    private long dayActivityAI = 0;
 
 
     public JsonData() {}
@@ -18,9 +19,6 @@ public class JsonData extends Data {
         long ai = 0;
 
         switch(s) {
-            default:
-                System.out.printf("AI of table %s not found.", s);
-                break;
             case "day":
                 dayAI++;
                 ai = dayAI;
@@ -29,9 +27,9 @@ public class JsonData extends Data {
                 activityAI++;
                 ai = activityAI;
                 break;
-            case "dayActivity":
-                dayActivityAI++;
-                ai = dayActivityAI;
+            default:
+                Error.set("AI of table " + s + " not found.");
+                break;
         }
 
         return ai;
