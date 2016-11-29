@@ -25,7 +25,7 @@ public class View {
     public View() {
 
         msg = "";
-        dateFormat = new SimpleDateFormat("YYYY-mm-dd", Locale.GERMANY);
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
     }
 
 
@@ -36,12 +36,12 @@ public class View {
         clearBuffer();
 
         msg += "Hauptmenü\n";
-        msg += this.line("-");
+        msg += line("-");
         msg += "\n";
         msg += "1) Tage auflisten\n";
         msg += "2) Aktivitäten auflisten\n";
         msg += "3) Statistik aufrufen\n";
-        msg += this.line("-");
+        msg += line("-");
         msg += "4) Tag hinzufügen\n";
         msg += "5) Aktivität hinzufügen\n";
         msg += "\n";
@@ -97,7 +97,7 @@ public class View {
         clearBuffer();
 
         msg += "Liste aller geplanten Tage\n";
-        msg += this.line("-");
+        msg += line("-");
         msg += "\n";
 
         System.out.println(msg);
