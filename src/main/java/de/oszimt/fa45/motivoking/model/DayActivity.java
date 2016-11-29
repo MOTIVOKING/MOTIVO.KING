@@ -9,7 +9,6 @@ public class DayActivity extends Model {
     private long dayId;
 
     public DayActivity(long t_dayId, long t_activityId) {
-        setId(0);
         activityId = t_activityId;
         dayId = t_dayId;
     }

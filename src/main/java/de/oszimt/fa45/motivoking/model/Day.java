@@ -1,15 +1,23 @@
 package de.oszimt.fa45.motivoking.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by boerg on 13.10.2016.
  */
 public class Day extends Model {
 
+    private long id;
     private Date date;
+
+    public final long getId() {
+        return id;
+    }
+
+
+    public final void setId(long t_id) {
+        id = t_id;
+    }
 
 
     /**
