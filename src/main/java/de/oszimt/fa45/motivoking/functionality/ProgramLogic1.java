@@ -9,10 +9,7 @@ import de.oszimt.fa45.motivoking.model.DayActivity;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by RedCyberSamurai on 17.10.2016.
@@ -29,14 +26,15 @@ public class ProgramLogic1 implements ProgramLogic {
 
     /**
      * Creates a day.
-     * @param dateString    A string of format "YYYY-mm-dd".
+     * @param dateString    A string of format "yyyy-MM-dd".
      */
     public void createDay(String dateString) {
         // NOTE: supporting multiple date formats?
-        DateFormat format = new SimpleDateFormat("YYYY-mm-dd", Locale.GERMANY);
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
 
         Date date = null;
         try {
+            format.setLenient(false); // date validation
             date = format.parse(dateString);
         } catch (ParseException e) {
             Error.set("Error: Invalid date format.");
@@ -44,8 +42,11 @@ public class ProgramLogic1 implements ProgramLogic {
         }
 
         if(date != null) {
-            Day day = new Day(date);
-            mDataHolder.addDay(day);
+
+            if(format.format(date).equals(dateString)) {
+                Day day = new Day(date);
+                mDataHolder.addDay(day);
+            }
         }
     }
 
@@ -55,6 +56,16 @@ public class ProgramLogic1 implements ProgramLogic {
      * @param id    Id of the day.
      */
     public void createActivity(long id, Activity activity) {
+        int relaxLevel = activity.getRelaxLevel();
+        int stressLevel = activity.getStressLevel();
+
+        if(relaxLevel > Activity.MAX_LEVEL || relaxLevel < Activity.MIN_LEVEL ||
+                stressLevel > Activity.MAX_LEVEL || stressLevel < Activity.MIN_LEVEL) {
+
+            Error.set("Sowohl das Stress-, als auch das Entspannungslevel");
+            Error.set("muss eine Zahl zwischen " + Activity.MAX_LEVEL + " und " + Activity.MIN_LEVEL + " enthalten.");
+            return;
+        }
 
         mDataHolder.addActivity(id, activity);
     }
@@ -66,7 +77,8 @@ public class ProgramLogic1 implements ProgramLogic {
      * @return  Returns the found day.
      */
     public Day getDay(long id) {
-        return mDataHolder.findDayById(id);
+        Day d = mDataHolder.findDayById(id);
+        return d != null ? d : new Day();
     }
 
 
