@@ -2,6 +2,7 @@ package de.oszimt.fa45.motivoking.data;
 
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
+import de.oszimt.fa45.motivoking.model.DayActivity;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ public interface DataHolder {
     Day findDayById(long dayId);
     List<Day> findAllDays();
     List<Activity> findActivitiesByDayId(long dayId);
+    List<DayActivity> findAllActivities();
     void addDay(Day day);
     void addActivity(long dayId, Activity activity);
 }

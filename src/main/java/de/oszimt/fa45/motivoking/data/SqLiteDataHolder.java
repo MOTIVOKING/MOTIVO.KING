@@ -1,8 +1,10 @@
 package de.oszimt.fa45.motivoking.data;
 
+import de.oszimt.fa45.motivoking.Error;
+import de.oszimt.fa45.motivoking.data.type.SqLiteData;
 import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
-import de.oszimt.fa45.motivoking.data.DataHolder;
+import de.oszimt.fa45.motivoking.model.DayActivity;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,9 +15,108 @@ import java.util.List;
  * Created by boerg on 13.10.2016.
  */
 public class SqLiteDataHolder implements DataHolder {
-    private static Connection connection;
-    private static final String DB_PATH = System.getProperty("user.home") + "/" + "motivo.king.db";
+    private int timeout = 1; // in seconds
+    private Connection connection;
+    private final String DB_NAME = "jdbc:sqlite:testfile.db";
 
+    private boolean connectedSuccessfully = false;
+
+    private SqLiteData mData;
+
+    private List<Day> mDays;
+    private List<Activity> mActivities;
+
+
+    public SqLiteDataHolder() {
+        mData = this.read();
+
+        if(connectedSuccessfully) {
+            System.out.println("SqLite connected successfully!");
+        }
+
+        /*
+
+        // list of days
+        mDays = mData.getDays();
+        // list of activities
+        mActivities = mData.getActivities();
+
+        */
+    }
+
+
+    private SqLiteData read() {
+        connect();
+
+
+
+        close();
+        return null;
+    }
+
+
+    private void write() {
+        connect();
+
+
+
+        close();
+    }
+
+
+    private void connect() {
+
+        connection = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection(DB_NAME);
+
+            // checking connection once for the startup
+            if(connectedSuccessfully || connection.isValid(timeout)) {
+                connectedSuccessfully = true;
+            }
+        } catch (ClassNotFoundException e) {
+            Error.set("Error resolving class name for SqLite.");
+            Error.set( e.getMessage() );
+        } catch (SQLException e) {
+            Error.set("Error running SqLite.");
+            Error.set( e.getMessage() );
+        }
+
+        if(Error.isset()) {
+            Error.print();
+            System.exit(1);
+        }
+    }
+
+
+    private void close() {
+
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            Error.set("Error closing SqLite.");
+            Error.set( e.getMessage() );
+        }
+
+        if(Error.isset()) {
+            Error.print();
+            System.exit(1);
+        }
+    }
+
+
+
+
+
+
+
+
+
+    // private static final String DB_PATH = System.getProperty("user.home") + "/" + "motivo.king.db";
+
+    /*
     static {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -24,7 +125,10 @@ public class SqLiteDataHolder implements DataHolder {
             e.printStackTrace();
         }
     }
+    */
 
+
+    /*
     private void initDBConnection() {
         try {
             if (connection != null)
@@ -52,9 +156,7 @@ public class SqLiteDataHolder implements DataHolder {
         });
     }
 
-    public SqLiteDataHolder() {
-
-    }
+    */
 
     @Override
     public Day findDayById(long dayId) {
@@ -68,6 +170,11 @@ public class SqLiteDataHolder implements DataHolder {
 
     @Override
     public List<Activity> findActivitiesByDayId(long dayId) {
+        return null;
+    }
+
+    @Override
+    public List<DayActivity> findAllActivities() {
         return null;
     }
 

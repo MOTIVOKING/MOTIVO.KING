@@ -10,6 +10,9 @@ import java.util.List;
  */
 public class Error {
 
+    private static final int MAX_TITLE_LENGTH = 74;
+    private static final int MAX_MESSAGE_LENGTH = 72;
+
     private static List<String> errors = new ArrayList<>();
 
 
@@ -35,25 +38,29 @@ public class Error {
     }
 
 
+    public static boolean isset() {
+        return errors.size() > 0;
+    }
+
+
     /**
      * Prints errors to the terminal view.
-     * @param view The used view to display messages.
      */
-    public static void print(View view) {
+    public static void print() {
         List<String> errors = get();
 
         if(errors.size() > 0) {
-            String errorTitle = "# %-74s #\n";
-            String errorMessage = "# > %-72s #\n";
+            String errorTitle = "# %-" + MAX_TITLE_LENGTH + "s #\n";
+            String errorMessage = "# > %-" + MAX_MESSAGE_LENGTH + "s #\n";
 
-            System.out.print( view.line("#") );
+            System.out.print( View.line("#") );
             System.out.format(errorTitle, "Errors:");
 
             for(String e : errors) {
                 System.out.format(errorMessage, e);
             }
 
-            System.out.print( view.line("#") + "\n\n" );
+            System.out.print( View.line("#") + "\n\n" );
         }
     }
 }

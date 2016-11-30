@@ -1,16 +1,23 @@
 package de.oszimt.fa45.motivoking.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by boerg on 13.10.2016.
  */
 public class Day extends Model {
 
+    private long id;
     private Date date;
-    private List<Long> activities;
+
+    public final long getId() {
+        return id;
+    }
+
+
+    public final void setId(long t_id) {
+        id = t_id;
+    }
 
 
     /**
@@ -28,7 +35,6 @@ public class Day extends Model {
     public Day(Date t_date) {
         date = t_date;
         setId(0);
-        activities = new ArrayList<>();
     }
 
 
@@ -49,21 +55,4 @@ public class Day extends Model {
         date = t_date;
     }
 
-
-    /**
-     * Returns a list of activities of the day.
-     * @return  Collection of activities of the day.
-     */
-    public List<Long> getActivities() {
-        return activities;
-    }
-
-
-    /**
-     * Adds an activity to the day. Does only add the id referencing the activity.
-     * @param t_activity    The activity to add.
-     */
-    public void setActivity(Activity t_activity) {
-        activities.add( t_activity.getId() );
-    }
 }

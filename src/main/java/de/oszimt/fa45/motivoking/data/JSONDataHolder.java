@@ -7,6 +7,7 @@ import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
 import de.oszimt.fa45.motivoking.data.type.JsonData;
 import de.oszimt.fa45.motivoking.Error;
+import de.oszimt.fa45.motivoking.model.DayActivity;
 
 import java.io.File;
 import java.io.FileReader;
@@ -29,6 +30,7 @@ public class JSONDataHolder implements DataHolder {
 
     private List<Day> mDays;
     private List<Activity> mActivities;
+    private List<DayActivity> mDayActivities;
 
     public JSONDataHolder() {
         // json container
@@ -41,6 +43,8 @@ public class JSONDataHolder implements DataHolder {
         mDays = mData.getDays();
         // list of activities
         mActivities = mData.getActivities();
+        // merge list of activities and the corresponding days
+        mDayActivities = mData.getDayActivities();
     }
 
 
@@ -141,10 +145,19 @@ public class JSONDataHolder implements DataHolder {
             return null;
         }
 
-        Day t_day = this.findDayById(t_dayId);
+        List<DayActivity> dayActivities = mDayActivities.stream()
+                .filter(dayActivity -> dayActivity.getDayId() == t_dayId)
+                .collect(Collectors.toList());
 
-        List<Long> activityIdList = t_day.getActivities();
-        return mActivities.stream().filter(a -> activityIdList.contains(a.getId()) ).collect(Collectors.toList());
+        return mActivities.stream()
+                .filter(a -> dayActivities.stream()
+                        .anyMatch(dA -> dA.getActivityId() == a.getId()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DayActivity> findAllActivities() {
+        return mDayActivities;
     }
 
 
@@ -177,18 +190,25 @@ public class JSONDataHolder implements DataHolder {
     public void addActivity(long t_dayId, Activity t_activity) {
 
         if(t_dayId > 0 && t_activity != null) {
-            Day day = this.findDayById(t_dayId);
 
-            if(day != null) {
+            if(this.findDayById(t_dayId) != null) {
                 t_activity.setId( mData.getAI("activity") );
-                day.setActivity(t_activity);
                 mActivities.add(t_activity);
+
+                DayActivity dA = new DayActivity(t_dayId, t_activity.getId());
+                mDayActivities.add(dA);
 
                 this.write( mGson.toJson(mData) );
             } else {
                 Error.set("Activity not added. No day found.");
+                return;
             }
+
+            System.out.printf("Added activity id: %s\n", t_activity.getId());
+            return;
         }
 
+        Error.set("Day not found!");
     }
+
 }

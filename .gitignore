@@ -5,6 +5,7 @@ build
 # .gradle/
 
 testfile.json
+testfile.db
 
 .gradle/2.13/taskArtifacts/
 
