@@ -27,8 +27,14 @@ public class App extends Application implements Initializable {
 
     private Stage mPrimaryStage;
 
-    @FXML private TableView<Day> tv_dates;
-    @FXML private TableColumn<Day, String> column_date;
+    @FXML
+    private TableView<Day> tv_dates;
+    @FXML
+    private TableColumn<Day, String> column_date;
+    @FXML
+    private DatePicker datePicker;
+    @FXML
+    private Button buttonAddDay;
 
     private ProgramLogic mProgramLogic;
 
@@ -37,22 +43,21 @@ public class App extends Application implements Initializable {
      * App constructor, initializing tables
      */
     public App() {
-        tv_dates = new TableView<>();
-        column_date = new TableColumn<>();
     }
 
 
     /**
      * Main JavaFx hook
-     * @param t_primaryStage
+     *
+     * @param tPrimaryStage
      * @throws Exception
      */
     @Override
-    public void start(Stage t_primaryStage) throws Exception {
+    public void start(Stage tPrimaryStage) throws Exception {
         mProgramLogic = GraphicalUserInterface.getProgramLogic();
 
-        System.out.println("App::start");
-        mPrimaryStage = t_primaryStage;
+        System.out.println("App::start " + mProgramLogic);
+        mPrimaryStage = tPrimaryStage;
 
         initRootLayout();
         initDays();
@@ -60,15 +65,14 @@ public class App extends Application implements Initializable {
 
 
     /**
-     *
      * @param location
      * @param resources
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        column_date.setCellValueFactory(
-                cellData -> new SimpleStringProperty( cellData.getValue().getDate().toString() )
-        );
+//        column_date.setCellValueFactory(
+//                cellData -> new SimpleStringProperty( cellData.getValue().getDate().toString() )
+//        );
     }
 
 
@@ -98,10 +102,10 @@ public class App extends Application implements Initializable {
      *
      */
     private void initDays() {
-        ObservableList<Day> list = FXCollections.observableArrayList();
+//        ObservableList<Day> list = FXCollections.observableArrayList();
 
-        list.addAll(mProgramLogic.getDays());
-        tv_dates.setItems(list);
+//        list.addAll(mProgramLogic.getDays());
+//        tv_dates.setItems(list);
     }
 
 
@@ -111,14 +115,21 @@ public class App extends Application implements Initializable {
 
     @FXML
     private void onAddDay(ActionEvent actionEvent) {
-        Alert dateInput = new Alert(Alert.AlertType.NONE);
-
-        DialogPane dialogPane = new DialogPane();
-        DatePicker datePicker = new DatePicker();
-
-        dialogPane.getChildren().add(datePicker);
-        dateInput.setDialogPane(dialogPane);
-        dateInput.showAndWait();
+        if (datePicker.isDisabled()) {
+            datePicker.setDisable(false);
+            buttonAddDay.setText("Abbrechen");
+            datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+                buttonAddDay.setText(newValue == null ? "Abbrechen" : "Speichern");
+            });
+        } else {
+            if (datePicker.getValue() != null) {
+                mProgramLogic.createDay(datePicker.getValue().toString());
+                datePicker.setDisable(true);
+            } else {
+                datePicker.setDisable(true);
+            }
+            buttonAddDay.setText("Tag hinzufügen");
+        }
     }
 
 
