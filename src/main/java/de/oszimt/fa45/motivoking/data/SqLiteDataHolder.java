@@ -46,8 +46,10 @@ public class SqLiteDataHolder implements DataHolder {
 
 
     private SqLiteData read() {
+        SqLiteData sqlData = null;
         connect();
 
+        // TODO: create table only once
 
 
         close();
@@ -58,7 +60,7 @@ public class SqLiteDataHolder implements DataHolder {
     private void write() {
         connect();
 
-
+        // TODO: save data into database and base model (insertion/deletion)
 
         close();
     }

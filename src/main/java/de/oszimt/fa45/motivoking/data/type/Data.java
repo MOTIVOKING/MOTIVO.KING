@@ -21,12 +21,17 @@ public abstract class Data {
         return days;
     }
 
+    public void setDays(List<Day> t_days) { days = t_days; };
+
 
     public List<Activity> getActivities() { return activities; }
+
+    public void setActivities(List<Activity> t_activities) { activities = t_activities; }
 
 
     public List<DayActivity> getDayActivities() {
         return dayActivities;
     }
 
+    public void setDayActivities(List<DayActivity> t_dayActivities) { dayActivities = t_dayActivities; }
 }

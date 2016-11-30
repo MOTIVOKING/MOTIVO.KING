@@ -12,27 +12,24 @@ public class SqLiteData extends Data {
 
 
     public String getTableQuery() {
-        String query = "";
+        String tableQuery = "";
 
         query += "CREATE TABLE activities (";
         query += "id            INT PRIMARY KEY NOT NULL, ";
         query += "name          TEXT(50) NOT NULL, ";
         query += "stressLevel   INT(4) NOT NULL, ";
-        query += "relaxLevel    INT(4) NOT NULL";
-        query += ");";
+        query += "relaxLevel    INT(4) NOT NULL);";
 
         query += "CREATE TABLE days (";
         query += "date          DATE NOT NULL, ";
-        query += "activities    ARRAY NOT NULL";
-        query += ");";
+        query += "activities    ARRAY NOT NULL);";
 
         query += "CREATE TABLE dayActivities (";
         query += "id            INT PRIMARY KEY NOT NULL, ";
         query += "activityId    INT NOT NULL, ";
-        query += "dayId         INT NOT NULL";
-        query += ");";
+        query += "dayId         INT NOT NULL);";
 
-        return query;
+        return tableQuery;
     }
 
 
@@ -56,6 +53,12 @@ public class SqLiteData extends Data {
 
     public void where(String target1, String delimiter, String target2) {
         query += " WHERE " + target1 + delimiter + target2;
+    }
+
+
+    public void andWhere(String target1, String delimiter, String target2) {
+        query += " AND";
+        where(target1, delimiter, target2);
     }
 
 
