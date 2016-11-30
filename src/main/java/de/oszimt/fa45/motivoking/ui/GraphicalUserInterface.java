@@ -14,12 +14,12 @@ public class GraphicalUserInterface implements UserInterface {
 
     /**
      * GUI constructor, launching the window app.
-     * @param t_programLogic    Program logic to work with
+     * @param tProgramLogic    Program logic to work with
      */
-    public GraphicalUserInterface(ProgramLogic t_programLogic) {
+    public GraphicalUserInterface(ProgramLogic tProgramLogic) {
         System.out.println("::GraphicalUserInterface");
 
-        mProgramLogic = t_programLogic;
+        mProgramLogic = tProgramLogic;
         Application.launch(App.class);
     }
 
@@ -32,4 +32,6 @@ public class GraphicalUserInterface implements UserInterface {
     public static ProgramLogic getProgramLogic() {
         return mProgramLogic;
     }
+
+
 }
