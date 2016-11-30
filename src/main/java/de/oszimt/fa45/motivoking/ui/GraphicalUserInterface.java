@@ -3,6 +3,7 @@ package de.oszimt.fa45.motivoking.ui;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
 import de.oszimt.fa45.motivoking.ui.fxml.App;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 
 /**
  * Created by boerg on 13.10.2016.
@@ -10,13 +11,6 @@ import javafx.application.Application;
 public class GraphicalUserInterface implements UserInterface {
 
     private static ProgramLogic mProgramLogic;
-
-
-    public GraphicalUserInterface() {
-        System.out.println("Error: Invalid GUI access ::GraphicalUserInterface");
-        System.exit(1);
-    }
-
 
     /**
      * GUI constructor, launching the window app.
