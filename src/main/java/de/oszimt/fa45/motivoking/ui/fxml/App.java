@@ -14,10 +14,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+<<<<<<< HEAD
 import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+=======
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+>>>>>>> origin/boerge
 
 import java.io.IOException;
 import java.net.URL;
