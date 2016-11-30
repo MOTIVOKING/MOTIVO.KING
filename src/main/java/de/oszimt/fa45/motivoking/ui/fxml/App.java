@@ -4,6 +4,7 @@ import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
 import de.oszimt.fa45.motivoking.model.Day;
 import de.oszimt.fa45.motivoking.ui.GraphicalUserInterface;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -54,9 +55,7 @@ public class App extends Application implements Initializable {
      */
     @Override
     public void start(Stage tPrimaryStage) throws Exception {
-        this.mProgramLogic = GraphicalUserInterface.getProgramLogic();
-
-        System.out.println("App::start " + mProgramLogic);
+        System.out.println("App::start");
         mPrimaryStage = tPrimaryStage;
 
         initRootLayout();
@@ -70,6 +69,8 @@ public class App extends Application implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.mProgramLogic = GraphicalUserInterface.getProgramLogic();
+        System.out.println("programLogic: " + this.mProgramLogic);
 //        column_date.setCellValueFactory(
 //                cellData -> new SimpleStringProperty( cellData.getValue().getDate().toString() )
 //        );
@@ -120,7 +121,9 @@ public class App extends Application implements Initializable {
             });
         } else {
             if (datePicker.getValue() != null) {
+                System.out.println("mProgramLogic: " + mProgramLogic);
                 this.mProgramLogic.createDay(datePicker.getValue().toString());
+                datePicker.setValue(null);
                 datePicker.setDisable(true);
             } else {
                 datePicker.setDisable(true);
