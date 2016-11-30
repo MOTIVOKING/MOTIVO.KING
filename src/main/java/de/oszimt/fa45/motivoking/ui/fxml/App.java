@@ -14,8 +14,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
@@ -59,7 +61,6 @@ public class App extends Application implements Initializable {
         mPrimaryStage = tPrimaryStage;
 
         initRootLayout();
-        initDays();
     }
 
 
@@ -71,9 +72,8 @@ public class App extends Application implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         this.mProgramLogic = GraphicalUserInterface.getProgramLogic();
         System.out.println("programLogic: " + this.mProgramLogic);
-//        column_date.setCellValueFactory(
-//                cellData -> new SimpleStringProperty( cellData.getValue().getDate().toString() )
-//        );
+
+        initDays();
     }
 
 
@@ -95,15 +95,20 @@ public class App extends Application implements Initializable {
         }
     }
 
-
     /**
      *
      */
     private void initDays() {
-//        ObservableList<Day> list = FXCollections.observableArrayList();
-
-//        list.addAll(mProgramLogic.getDays());
-//        tv_dates.setItems(list);
+        ObservableList<Day> observableDays = FXCollections.observableArrayList(mProgramLogic.getDays());
+        System.out.println(observableDays.toString());
+        tv_dates.setItems(observableDays);
+        column_date.setCellFactory((TableColumn<Day, String> column) -> new TableCell<Day, String>(){
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(item);
+            }
+        });
     }
 
 
@@ -129,6 +134,7 @@ public class App extends Application implements Initializable {
                 datePicker.setDisable(true);
             }
             buttonAddDay.setText("Tag hinzufügen");
+            initDays();
         }
     }
 
