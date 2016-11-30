@@ -54,7 +54,7 @@ public class App extends Application implements Initializable {
      */
     @Override
     public void start(Stage tPrimaryStage) throws Exception {
-        mProgramLogic = GraphicalUserInterface.getProgramLogic();
+        this.mProgramLogic = GraphicalUserInterface.getProgramLogic();
 
         System.out.println("App::start " + mProgramLogic);
         mPrimaryStage = tPrimaryStage;
@@ -80,14 +80,11 @@ public class App extends Application implements Initializable {
      *
      */
     private void initRootLayout() {
-
         System.out.println(getClass());
-
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("GraphicalUserInterface.fxml"));
             AnchorPane root = loader.load();
-
             Scene scene = new Scene(root);
             mPrimaryStage.setScene(scene);
             mPrimaryStage.setTitle("MOTIVO.KING");
@@ -123,7 +120,7 @@ public class App extends Application implements Initializable {
             });
         } else {
             if (datePicker.getValue() != null) {
-                mProgramLogic.createDay(datePicker.getValue().toString());
+                this.mProgramLogic.createDay(datePicker.getValue().toString());
                 datePicker.setDisable(true);
             } else {
                 datePicker.setDisable(true);
