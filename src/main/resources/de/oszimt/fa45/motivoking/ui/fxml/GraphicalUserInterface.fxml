@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
@@ -13,14 +14,14 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
             prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="de.oszimt.fa45.motivoking.ui.GraphicalUserInterface">
-    <TableView fx:id="tv_dates" layoutX="14.0" layoutY="14.0" prefHeight="532.0" prefWidth="253.0">
+            fx:controller="de.oszimt.fa45.motivoking.ui.fxml.App">
+    <TableView fx:id="tv_dates" layoutX="14.0" layoutY="14.0" prefHeight="511.0" prefWidth="253.0">
         <columns>
-            <TableColumn id="column_date" prefWidth="252.0" resizable="false" text="Datum"/>
+            <TableColumn fx:id="column_date" prefWidth="252.0" resizable="false" text="Datum"/>
         </columns>
     </TableView>
-    <Button layoutX="14.0" layoutY="561.0" mnemonicParsing="false" onAction="#onAddDay" prefHeight="25.0"
-            prefWidth="253.0" text="Tag hinzufügen"/>
+    <Button fx:id="buttonAddDay" layoutX="14.0" layoutY="561.0" mnemonicParsing="false" onAction="#onAddDay"
+            prefHeight="25.0" prefWidth="253.0" text="Tag hinzufügen"/>
     <Label layoutX="282.0" layoutY="24.0" text="Tag:"/>
     <Separator layoutX="264.0" layoutY="1.0" orientation="VERTICAL" prefHeight="600.0" prefWidth="13.0"/>
     <Label layoutX="344.0" layoutY="24.0" text="..."/>
@@ -54,4 +55,5 @@
         <Label fx:id="txt_stresslevel" text="99" GridPane.columnIndex="1"/>
         <Label fx:id="txt_relaxlevel" text="99" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
     </GridPane>
+    <DatePicker fx:id="datePicker" disable="true" layoutX="14.0" layoutY="531.0" prefHeight="31.0" prefWidth="253.0"/>
 </AnchorPane>
