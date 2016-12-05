@@ -174,7 +174,7 @@ public class SqLiteDataHolder implements DataHolder {
     }
 
     @Override
-    public List<DayActivity> findAllActivities() {
+    public List<Activity> findAllActivities() {
         return null;
     }
 

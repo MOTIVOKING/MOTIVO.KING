@@ -156,8 +156,8 @@ public class JSONDataHolder implements DataHolder {
     }
 
     @Override
-    public List<DayActivity> findAllActivities() {
-        return mDayActivities;
+    public List<Activity> findAllActivities() {
+        return mActivities;
     }
 
 

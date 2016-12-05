@@ -15,6 +15,7 @@ public interface ProgramLogic {
     void createActivity(long id, Activity activity);
     Day getDay(long id);
     List<Day> getDays();
-    List<DayActivity> getDayActivities();
+    List<Activity> getAllActivities();
+    void addActivity();
     List<Activity> getActivities(long id);
 }
