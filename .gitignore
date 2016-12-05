@@ -71,3 +71,8 @@ fabric.properties
 /.idea/vcs.xml
 /gradle/wrapper/gradle-wrapper.properties
 /.idea/.name
+/.gradle/3.1/taskArtifacts/cache.properties
+/.gradle/3.1/taskArtifacts/cache.properties.lock
+/.gradle/3.1/taskArtifacts/fileHashes.bin
+/.gradle/3.1/taskArtifacts/fileSnapshots.bin
+/.gradle/3.1/taskArtifacts/taskArtifacts.bin
