@@ -1,5 +1,7 @@
 package de.oszimt.fa45.motivoking.data.sqlite;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -61,13 +63,24 @@ public class QueryBuilder {
         return this;
     }
 
-    public QueryBuilder values(Map<String, String> map) {
-        // ignore id when inserting statement is used (TODO flag?)
-        map.remove("id");
+    public QueryBuilder values(Map<String, String> map, boolean isInsert) {
 
-        // TODO ordered join????
-        String queryKeys = map.keySet().stream().collect(Collectors.joining(","));
-        String queryValues = map.values().stream().collect(Collectors.joining(","));
+        // ignore id when inserting statement is used
+        if(isInsert) {
+
+            map.remove("id");
+        }
+
+        List<String> queryKeysList = new ArrayList<>();
+        List<String> queryValuesList = new ArrayList<>();
+
+        for(Map.Entry<String, String> m : map.entrySet()) {
+            queryKeysList.add(m.getKey());
+            queryValuesList.add(m.getValue());
+        }
+
+        String queryKeys = queryKeysList.stream().collect(Collectors.joining(","));
+        String queryValues = queryValuesList.stream().collect(Collectors.joining(","));
 
         query += " (" + queryKeys + ") VALUES (" + queryValues + ")";
 

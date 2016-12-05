@@ -20,21 +20,36 @@ public class SqLiteDataHolder implements DataHolder {
     private Statement statement;
     private final String DB_NAME = "jdbc:sqlite:testfile.db";
 
-    private int generatedKey = 0;
-
-    private boolean connectedSuccessfully = false;
-
     private QueryBuilder qb;
+    private boolean connectedSuccessfully = false;
 
 
     public SqLiteDataHolder() {
-        SqLiteData.setTableQuery();
 
-        // initializeTable(); // TODO
         qb = new QueryBuilder();
+    }
 
-        String query = "";
-        this.read(query);
+
+    public void initializeTable(boolean dropTables) {
+        SqLiteData.setTableQuery(dropTables);
+        connect();
+
+        runQuery(SqLiteData.getTableQuery());
+
+        close();
+    }
+
+
+    private void runQuery(String query) {
+
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+            statement.close();
+        } catch (SQLException e) {
+            Error.set("Error: SQL statement");
+            Error.set(e.getMessage());
+        }
     }
 
 
@@ -44,8 +59,10 @@ public class SqLiteDataHolder implements DataHolder {
 
         try {
             statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery( qb.getQuery() );
+            ResultSet rs = statement.executeQuery(query);
 
+
+            // TODO
 
         } catch (SQLException e) {
             Error.set("Could not read the query correctly.");
@@ -60,13 +77,16 @@ public class SqLiteDataHolder implements DataHolder {
         long id = 0;
         connect();
 
-        // TODO: save data into database and base model (insertion/deletion)
-
         if(isInsert) {
             try {
+                // TODO data insert / delete query
+
+                statement.executeUpdate(query);
+                ResultSet rs = statement.getResultSet();
+
 
                 // getting the generated id of the entity
-                ResultSet rs = statement.getGeneratedKeys();
+                rs = statement.getGeneratedKeys();
                 if(rs.next()) {
                     id = rs.getLong(1);
                 }
@@ -126,28 +146,6 @@ public class SqLiteDataHolder implements DataHolder {
     }
 
 
-    private void initializeTable() {
-        connect();
-
-        runQuery(SqLiteData.getTableQuery());
-
-        close();
-    }
-
-
-    private void runQuery(String query) {
-
-        try {
-            statement = connection.createStatement();
-            statement.executeUpdate("");
-            statement.close();
-        } catch (SQLException e) {
-            Error.set("Error: SQL statement");
-            Error.set(e.getMessage());
-        }
-    }
-
-
     @Override
     public Day findDayById(long dayId) {
         if(dayId < 1) {
@@ -200,7 +198,7 @@ public class SqLiteDataHolder implements DataHolder {
             Error.set("Cannot get fields of the specified model.");
             return;
         }
-        qb.insertInto("days").values(map);
+        qb.insertInto("days").values(map, true);
 
         String query = qb.getQuery();
         this.write(query, true);
@@ -230,7 +228,7 @@ public class SqLiteDataHolder implements DataHolder {
             Error.set("Cannot get fields of the specified model.");
             return;
         }
-        qb.insertInto("activity").values(map);
+        qb.insertInto("activity").values(map, true);
 
         query = qb.getQuery();
         long activityId = this.write(query, true);
@@ -244,7 +242,7 @@ public class SqLiteDataHolder implements DataHolder {
             return;
         }
 
-        qb.insertInto("dayActivities").values(map);
+        qb.insertInto("dayActivities").values(map, true);
 
         query = qb.getQuery();
         this.write(query, true);
