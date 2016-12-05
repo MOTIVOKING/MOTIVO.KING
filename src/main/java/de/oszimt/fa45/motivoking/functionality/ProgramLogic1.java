@@ -92,13 +92,14 @@ public class ProgramLogic1 implements ProgramLogic {
     }
 
     @Override
-    public List<Activity> getAllActivities() {
-        return mDataHolder.findAllActivities();
+    public List<DayActivity> getDayActivities() {
+        List<DayActivity> dA = mDataHolder.findAllDayActivities();
+        return dA != null ? dA : new ArrayList<>();
     }
 
     @Override
-    public void addActivity() {
-
+    public List<Activity> getAllActivities() {
+        return mDataHolder.findAllActivities();
     }
 
 

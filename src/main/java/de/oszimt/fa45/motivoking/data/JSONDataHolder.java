@@ -156,10 +156,14 @@ public class JSONDataHolder implements DataHolder {
     }
 
     @Override
+    public List<DayActivity> findAllDayActivities() {
+        return mDayActivities;
+    }
+
+    @Override
     public List<Activity> findAllActivities() {
         return mActivities;
     }
-
 
     /**
      * Adds a day to the JSON file.
