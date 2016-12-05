@@ -12,9 +12,13 @@ import java.util.List;
 public interface DataHolder {
     Day findDayById(long dayId);
     List<Day> findAllDays();
-    List<Activity> findActivitiesByDayId(long dayId);
     List<DayActivity> findAllDayActivities();
+
+    Activity findActivityById(long id);
     List<Activity> findAllActivities();
+    List<Activity> findActivitiesByDayId(long dayId);
+
     void addDay(Day day);
     void addActivity(long dayId, Activity activity);
+    void addActivityToDay(long dayId, long activityId);
 }

@@ -161,6 +161,11 @@ public class JSONDataHolder implements DataHolder {
     }
 
     @Override
+    public Activity findActivityById(long id) {
+        return mActivities.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
+    }
+
+    @Override
     public List<Activity> findAllActivities() {
         return mActivities;
     }
@@ -209,6 +214,25 @@ public class JSONDataHolder implements DataHolder {
             }
 
             System.out.printf("Added activity id: %s\n", t_activity.getId());
+            return;
+        }
+
+        Error.set("Day not found!");
+    }
+
+    @Override
+    public void addActivityToDay(long dayId, long activityId) {
+
+        if(dayId > 0 && activityId > 0) {
+
+            if(this.findDayById(dayId) != null && this.findActivityById(activityId) != null) {
+
+                DayActivity dA = new DayActivity(dayId, activityId);
+                mDayActivities.add(dA);
+            } else {
+                Error.set("Activity not added. No day found.");
+            }
+
             return;
         }
 
