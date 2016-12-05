@@ -55,4 +55,8 @@ public class Day extends Model {
         date = t_date;
     }
 
+    @Override
+    public String toString() {
+        return date == null ? "error" : date.toString();
+    }
 }
