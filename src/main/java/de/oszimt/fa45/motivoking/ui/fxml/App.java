@@ -32,6 +32,8 @@ import java.util.ResourceBundle;
  */
 public class App extends Application implements Initializable {
 
+    @FXML private ComboBox<String> comboBoxAllActivities;
+    @FXML private Label txtStresslevel,  txtRelaxlevel;
     private Stage mPrimaryStage;
 
     @FXML
@@ -41,7 +43,7 @@ public class App extends Application implements Initializable {
     @FXML
     private DatePicker datePicker;
     @FXML
-    private Button buttonAddDay;
+    private Button buttonAddDay, btCreateActivity;
 
     @FXML
     private Label labelSelectedDate;
@@ -86,11 +88,18 @@ public class App extends Application implements Initializable {
 
         initDays();
         initActivityTable();
+        initActivities();
         tvDates.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Platform.runLater(() -> labelSelectedDate.setText(newValue.getDate() == null ? "null" : new SimpleDateFormat("dd.MM.yyyy").format(newValue.getDate())));
             ObservableList<Activity> activities = FXCollections.observableArrayList(mProgramLogic.getActivities(newValue.getId()));
             tvActivities.setItems(activities);
         });
+    }
+
+    private void initActivities() {
+        ObservableList<String> a = FXCollections.observableArrayList();
+        mProgramLogic.getAllActivities().forEach(activity -> a.add(activity.getName()));
+        comboBoxAllActivities.setItems(a);
     }
 
     private void initActivityTable() {
@@ -181,8 +190,7 @@ public class App extends Application implements Initializable {
 
 
     @FXML
-    private void onAddAction(ActionEvent actionEvent) {
-        
+    private void onAddActivity(ActionEvent actionEvent) {
     }
 
 
@@ -195,5 +203,11 @@ public class App extends Application implements Initializable {
     @FXML
     private void onChangeAction(ActionEvent actionEvent) {
 
+    }
+
+    @FXML private void onCreateActivity(ActionEvent actionEvent) {
+    }
+
+    @FXML private void selectedActivityChanged(ActionEvent actionEvent) {
     }
 }
