@@ -1,7 +1,7 @@
 # Kompillierter Code wird nicht versioniert
 build
 
-# .idea/
+.idea/
 # .gradle/
 
 testfile.json
