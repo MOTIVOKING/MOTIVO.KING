@@ -6,6 +6,7 @@ import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
 import de.oszimt.fa45.motivoking.ui.GraphicalUserInterface;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,7 +21,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -40,9 +43,12 @@ public class App extends Application implements Initializable {
     @FXML
     private Button buttonAddDay;
 
-    @FXML private Label labelSelectedDate;
-    @FXML private TableView<Activity> tvActivities;
-    @FXML private TableColumn<Activity, String> tcActivity, tcStress, tcRelax;
+    @FXML
+    private Label labelSelectedDate;
+    @FXML
+    private TableView<Activity> tvActivities;
+    @FXML
+    private TableColumn<Activity, String> tcActivity, tcStress, tcRelax;
 
     private ProgramLogic mProgramLogic;
 
@@ -79,10 +85,18 @@ public class App extends Application implements Initializable {
         System.out.println("programLogic: " + this.mProgramLogic);
 
         initDays();
+        initActivityTable();
         tvDates.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            labelSelectedDate.setText(newValue.getDate() == null ? "null" : newValue.getDate().toString());
-//            tvActivities.setItems(newValue.get);
+            Platform.runLater(() -> labelSelectedDate.setText(newValue.getDate() == null ? "null" : new SimpleDateFormat("dd.MM.yyyy").format(newValue.getDate())));
+            ObservableList<Activity> activities = FXCollections.observableArrayList(mProgramLogic.getActivities(newValue.getId()));
+            tvActivities.setItems(activities);
         });
+    }
+
+    private void initActivityTable() {
+        tcActivity.setCellValueFactory(item -> new SimpleStringProperty(item.getValue().getName()));
+        tcRelax.setCellValueFactory(item -> new SimpleStringProperty(Integer.toString(item.getValue().getRelaxLevel())));
+        tcActivity.setCellValueFactory(item -> new SimpleStringProperty(Integer.toString(item.getValue().getRelaxLevel())));
     }
 
 
@@ -127,7 +141,7 @@ public class App extends Application implements Initializable {
 
 
     @FXML
-    private void onAddDay(ActionEvent actionEvent) {
+    private void onAddDay(ActionEvent actionEvent) throws ParseException {
         if (datePicker.isDisabled()) {
             datePicker.setDisable(false);
             buttonAddDay.setText("Abbrechen");
@@ -136,7 +150,8 @@ public class App extends Application implements Initializable {
             });
         } else {
             if (datePicker.getValue() != null) {
-                this.mProgramLogic.createDay(datePicker.getValue().toString());
+                if (!dayExisting(new SimpleDateFormat("yyyy-mm-dd").parse(datePicker.getValue().toString())))
+                    this.mProgramLogic.createDay(datePicker.getValue().toString());
                 datePicker.setValue(null);
                 datePicker.setDisable(true);
             } else {
@@ -146,6 +161,22 @@ public class App extends Application implements Initializable {
             initDays();
             Error.print();
         }
+    }
+
+    private boolean dayExisting(Date date) {
+        Calendar cDateCalendar = Calendar.getInstance();
+        cDateCalendar.setTime(date);
+        for (Day day : mProgramLogic.getDays()) {
+            Calendar temp = Calendar.getInstance();
+            temp.setTime(day.getDate());
+            System.out.println("NEW: " + date.toString() + " OLD: " + day.getDate().toString());
+            if (cDateCalendar.get(Calendar.YEAR) == temp.get(Calendar.YEAR) &&
+                    cDateCalendar.get(Calendar.DAY_OF_YEAR) == temp.get(Calendar.DAY_OF_YEAR)) {
+                System.out.println("EXISTING");
+                return true;
+            }
+        }
+        return false;
     }
 
 
