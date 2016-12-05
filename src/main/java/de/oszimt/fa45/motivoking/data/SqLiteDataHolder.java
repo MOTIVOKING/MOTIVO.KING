@@ -182,11 +182,16 @@ public class SqLiteDataHolder implements DataHolder {
     }
 
     @Override
-    public List<DayActivity> findAllActivities() {
+    public List<DayActivity> findAllDayActivities() {
         qb.select("*").from("activities");
 
         String query = qb.getQuery();
         return this.read(query).getDayActivities();
+    }
+
+    @Override
+    public List<Activity> findAllActivities() {
+        return null;
     }
 
     @Override

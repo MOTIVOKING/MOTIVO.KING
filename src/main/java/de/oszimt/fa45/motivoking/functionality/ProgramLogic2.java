@@ -75,6 +75,11 @@ public class ProgramLogic2 implements ProgramLogic {
         return null;
     }
 
+    @Override
+    public List<Activity> getAllActivities() {
+        return null;
+    }
+
 
     /**
      * Returns a list of activities by a specified day.
