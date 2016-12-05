@@ -63,3 +63,11 @@ fabric.properties
 # modules.xml
 # .idea/misc.xml
 # *.ipr
+/.idea/modules
+/.idea/compiler.xml
+/.idea/gradle.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
+/gradle/wrapper/gradle-wrapper.properties
+/.idea/.name

@@ -125,8 +125,26 @@ public class Launcher {
             case "Database":
             case "database":
             case "DataBase":
-                mDataHolder = new SqLiteDataHolder();
+                SqLiteDataHolder sql = new SqLiteDataHolder();// workarround...
                 System.out.println("-> Sqlite");
+
+//                System.out.println("Datenbank bereinigen? [Y/n]");
+//                String option = mScanner.nextLine();
+//                switch (option) {
+//                    case "n":
+//                    case "N":
+//                        sql.initializeTable(false);
+//                        break;
+//                    case "y":
+//                    case "Y":
+//                    default:
+//                        sql.initializeTable(true);
+//                        break;
+//                }
+
+                sql.initializeTable(false);
+
+                mDataHolder = sql;
                 break;
             case "2":
             case "JSON":
