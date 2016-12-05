@@ -70,3 +70,4 @@ fabric.properties
 /.idea/modules.xml
 /.idea/vcs.xml
 /gradle/wrapper/gradle-wrapper.properties
+/.idea/.name
