@@ -13,7 +13,8 @@ public interface DataHolder {
     Day findDayById(long dayId);
     List<Day> findAllDays();
     List<Activity> findActivitiesByDayId(long dayId);
-    List<DayActivity> findAllActivities();
+    List<DayActivity> findAllDayActivities();
+    List<Activity> findAllActivities();
     void addDay(Day day);
     void addActivity(long dayId, Activity activity);
 }
