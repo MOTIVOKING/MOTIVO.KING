@@ -9,6 +9,7 @@ import de.oszimt.fa45.motivoking.functionality.ProgramLogic2;
 import de.oszimt.fa45.motivoking.ui.TerminalUserInterface;
 import de.oszimt.fa45.motivoking.ui.UserInterface;
 import de.oszimt.fa45.motivoking.ui.GraphicalUserInterface;
+import de.oszimt.fa45.motivoking.ui.terminal.Input;
 
 import java.util.Scanner;
 
@@ -16,7 +17,6 @@ import java.util.Scanner;
  * Created by RedCyberSamurai on 17.10.2016.
  */
 public class Launcher {
-    private Scanner mScanner;
 
     // available options
     private final int DATA_OPTION = 0;
@@ -40,7 +40,7 @@ public class Launcher {
         mArgs = args;
 
         // arguments fallback
-        mScanner = new Scanner(System.in);
+        Input.initialize();
     }
 
 
@@ -105,7 +105,7 @@ public class Launcher {
         }
 
         System.out.println( this.getQuestion(index) );
-        return mScanner.nextLine();
+        return Input.get();
     }
 
 
@@ -200,7 +200,7 @@ public class Launcher {
             case "TUI":
             case "tui":
             case "Tui":
-                mUserInterface = new TerminalUserInterface(mProgramLogic, mScanner);
+                mUserInterface = new TerminalUserInterface(mProgramLogic);
                 System.out.println(" -> TUI");
                 break;
         }
