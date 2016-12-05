@@ -71,13 +71,8 @@ public class ProgramLogic2 implements ProgramLogic {
     }
 
     @Override
-    public List<Activity> getAllActivities() {
-        return mDataHolder.findAllActivities();
-    }
-
-    @Override
-    public void addActivity() {
-
+    public List<DayActivity> getDayActivities() {
+        return null;
     }
 
     @Override
