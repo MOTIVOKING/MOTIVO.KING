@@ -1,10 +1,11 @@
 package de.oszimt.fa45.motivoking.ui.fxml;
 
+import de.oszimt.fa45.motivoking.Error;
 import de.oszimt.fa45.motivoking.functionality.ProgramLogic;
+import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
 import de.oszimt.fa45.motivoking.ui.GraphicalUserInterface;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,15 +15,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.ComboBoxListCell;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-import javafx.util.Callback;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 /**
@@ -33,13 +32,17 @@ public class App extends Application implements Initializable {
     private Stage mPrimaryStage;
 
     @FXML
-    private TableView<Day> tv_dates;
+    private TableView<Day> tvDates;
     @FXML
     private TableColumn<Day, String> column_date;
     @FXML
     private DatePicker datePicker;
     @FXML
     private Button buttonAddDay;
+
+    @FXML private Label labelSelectedDate;
+    @FXML private TableView<Activity> tvActivities;
+    @FXML private TableColumn<Activity, String> tcActivity, tcStress, tcRelax;
 
     private ProgramLogic mProgramLogic;
 
@@ -76,6 +79,10 @@ public class App extends Application implements Initializable {
         System.out.println("programLogic: " + this.mProgramLogic);
 
         initDays();
+        tvDates.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            labelSelectedDate.setText(newValue.getDate() == null ? "null" : newValue.getDate().toString());
+//            tvActivities.setItems(newValue.get);
+        });
     }
 
 
@@ -103,13 +110,14 @@ public class App extends Application implements Initializable {
     private void initDays() {
         ObservableList<Day> observableDays = FXCollections.observableArrayList(mProgramLogic.getDays());
         System.out.println(observableDays.toString());
-        tv_dates.setItems(observableDays);
-        column_date.setCellFactory((TableColumn<Day, String> column) -> new TableCell<Day, String>(){
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(item);
-            }
+
+        observableDays.add(new Day(new Date()));
+
+        System.out.println(observableDays.toString());
+        tvDates.setItems(observableDays);
+        column_date.setCellValueFactory(param -> {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+            return new SimpleStringProperty(simpleDateFormat.format(param.getValue().getDate()));
         });
     }
 
@@ -128,7 +136,6 @@ public class App extends Application implements Initializable {
             });
         } else {
             if (datePicker.getValue() != null) {
-                System.out.println("mProgramLogic: " + mProgramLogic);
                 this.mProgramLogic.createDay(datePicker.getValue().toString());
                 datePicker.setValue(null);
                 datePicker.setDisable(true);
@@ -137,6 +144,7 @@ public class App extends Application implements Initializable {
             }
             buttonAddDay.setText("Tag hinzufügen");
             initDays();
+            Error.print();
         }
     }
 
