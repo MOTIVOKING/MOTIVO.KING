@@ -26,6 +26,8 @@ public class SqLiteData extends Data {
 
     public static void setTableQuery(boolean doDrop) {
 
+        tableQuery = "";
+
         if(doDrop) {
             tableQuery += "DROP TABLE IF EXISTS activities;";
             tableQuery += "DROP TABLE IF EXISTS days;";

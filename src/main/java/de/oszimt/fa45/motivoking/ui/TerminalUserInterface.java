@@ -5,12 +5,10 @@ import de.oszimt.fa45.motivoking.model.Activity;
 import de.oszimt.fa45.motivoking.model.Day;
 import de.oszimt.fa45.motivoking.Error;
 import de.oszimt.fa45.motivoking.model.DayActivity;
+import de.oszimt.fa45.motivoking.ui.terminal.Input;
 import de.oszimt.fa45.motivoking.ui.terminal.View;
 
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Locale;
-import java.util.Scanner;
 
 /**
  * Created by RedCyberSamurai on 17.10.2016.
@@ -18,7 +16,6 @@ import java.util.Scanner;
 public class TerminalUserInterface implements UserInterface {
     private boolean mIsRunning = true;
 
-    private Scanner mScanner;
     private View mView;
 
     private ProgramLogic mProgramLogic;
@@ -27,14 +24,10 @@ public class TerminalUserInterface implements UserInterface {
     /**
      * Initialize the terminal with its needed components
      * @param t_programLogic    The program logic to use.
-     * @param t_scanner         The input reader.
      */
-    public TerminalUserInterface(ProgramLogic t_programLogic, Scanner t_scanner) {
+    public TerminalUserInterface(ProgramLogic t_programLogic) {
         // initializing program logic
         mProgramLogic = t_programLogic;
-        // initializing input reader
-        mScanner = t_scanner;
-        mScanner.useLocale(Locale.GERMAN);
         // initializing the view class
         mView = new View();
 
@@ -43,12 +36,12 @@ public class TerminalUserInterface implements UserInterface {
             Error.print();
             mView.menu();
 
-            String input = getString();
+            String input = Input.get();
 
             this.runPage(input);
         }
 
-        mScanner.close();
+        Input.close();
         System.out.println("Programm beendet.");
     }
 
@@ -80,7 +73,7 @@ public class TerminalUserInterface implements UserInterface {
 
                 if(days.size() > 0) {
                     System.out.println( mView.chooseDay() );
-                    id = getLong();
+                    id = Input.getLong();
                     day = days.stream().filter(d -> d.getId() == id).findFirst().orElse(null);
 
                     mView.clear();
@@ -96,7 +89,7 @@ public class TerminalUserInterface implements UserInterface {
             case "4": // --- creating the day ---
             case "create day":
                 System.out.println( mView.createDay() );
-                String date = getString();
+                String date = Input.get();
 
                 if(!Error.isset()) {
 
@@ -109,17 +102,17 @@ public class TerminalUserInterface implements UserInterface {
             case "create activity":
                 mView.printDaysTable(days, dayActivities);
                 System.out.println( mView.chooseDay() );
-                id = getLong();
+                id = Input.getLong();
 
                 if( days.stream().anyMatch(d -> d.getId() ==  id) ) {
                     System.out.println( mView.chooseActivityName() );
-                    String name = getString();
+                    String name = Input.get();
 
                     System.out.println( mView.chooseStressLevel() );
-                    int stressLevel = getInt();
+                    int stressLevel = Input.getInt();
 
                     System.out.println( mView.chooseRelaxLevel() );
-                    int relaxLevel = getInt();
+                    int relaxLevel = Input.getInt();
 
                     if(!Error.isset()) {
                         activity = new Activity(name, stressLevel, relaxLevel);
@@ -136,46 +129,5 @@ public class TerminalUserInterface implements UserInterface {
                 break;
         }
 
-    }
-
-
-    private String getString() {
-        String s = "";
-
-        if(mScanner.hasNextLine()) {
-            s = mScanner.nextLine();
-        } else {
-            Error.set("The given input exceeded the range of a String.");
-        }
-
-        return s;
-    }
-
-
-    private int getInt() {
-        int n = 0;
-
-        if(mScanner.hasNextInt()) {
-            n = mScanner.nextInt();
-            mScanner.nextLine(); // wtf java!!!!!!!
-        } else {
-            Error.set("The given input exceeded the range of an Integer.");
-        }
-
-        return n;
-    }
-
-
-    private long getLong() {
-        long l = 0;
-
-        if(mScanner.hasNextLong()) {
-            l = mScanner.nextLong();
-            mScanner.nextLine(); // wtf java!!!!!!!
-        } else {
-            Error.set("The given input exceeded the range of a Long.");
-        }
-
-        return l;
     }
 }

@@ -72,6 +72,16 @@ public class ProgramLogic1 implements ProgramLogic {
 
 
     /**
+     *
+     * @param t_dayId
+     * @param t_activityId
+     */
+    public void addActivity(long t_dayId, long t_activityId) {
+        mDataHolder.addActivityToDay(t_dayId, t_activityId);
+    }
+
+
+    /**
      * Gets a day by a specified id.
      * @param id The id of the day.
      * @return  Returns the found day.

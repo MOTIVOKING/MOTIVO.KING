@@ -54,15 +54,19 @@ public class SqLiteDataHolder implements DataHolder {
 
 
     private SqLiteData read(String query) {
-        SqLiteData data = null;
+        SqLiteData data = new SqLiteData();
         connect();
 
         try {
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
+            ResultSetMetaData meta = rs.getMetaData();
 
+            while(rs.next()) {
 
-            // TODO
+                // TODO
+            }
+
 
         } catch (SQLException e) {
             Error.set("Could not read the query correctly.");
@@ -79,14 +83,10 @@ public class SqLiteDataHolder implements DataHolder {
 
         if(isInsert) {
             try {
-                // TODO data insert / delete query
-
                 statement.executeUpdate(query);
-                ResultSet rs = statement.getResultSet();
-
 
                 // getting the generated id of the entity
-                rs = statement.getGeneratedKeys();
+                ResultSet rs = statement.getGeneratedKeys();
                 if(rs.next()) {
                     id = rs.getLong(1);
                 }
@@ -190,6 +190,14 @@ public class SqLiteDataHolder implements DataHolder {
     }
 
     @Override
+    public Activity findActivityById(long id) {
+        qb.select("*").from("activities").where("id", "=", String.valueOf(id));
+
+        String query = qb.getQuery();
+        return this.read(query).getActivities().get(0);
+    }
+
+    @Override
     public List<Activity> findAllActivities() {
         return null;
     }
@@ -250,6 +258,17 @@ public class SqLiteDataHolder implements DataHolder {
         qb.insertInto("dayActivities").values(map, true);
 
         query = qb.getQuery();
+        this.write(query, true);
+    }
+
+    public void addActivityToDay(long t_dayId, long t_activityId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("dayId", String.valueOf(t_dayId));
+        map.put("activityId", String.valueOf(t_activityId));
+
+        qb.insertInto("dayActivities").values(map, true);
+
+        String query = qb.getQuery();
         this.write(query, true);
     }
 
