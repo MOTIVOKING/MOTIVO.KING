@@ -13,6 +13,9 @@ public class Activity extends Model {
     private int stressLevel;
     private int relaxLevel;
 
+    public Activity() {
+    }
+
 
     public final long getId() {
         return id;

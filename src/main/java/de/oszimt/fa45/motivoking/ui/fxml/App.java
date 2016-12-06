@@ -96,7 +96,6 @@ public class App extends Application implements Initializable {
         initActivities();
         tvDates.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Platform.runLater(() -> labelSelectedDate.setText(newValue.getDate() == null ? "null" : new SimpleDateFormat("dd.MM.yyyy").format(newValue.getDate())));
-            ObservableList<Activity> activities = FXCollections.observableArrayList(mProgramLogic.getActivities(newValue.getId()));
             refreshDayDetails();
             buttonCreateActivity.setDisable(false);
         });
@@ -185,8 +184,16 @@ public class App extends Application implements Initializable {
             });
         } else {
             if (datePicker.getValue() != null) {
-                if (!dayExisting(new SimpleDateFormat("yyyy-mm-dd").parse(datePicker.getValue().toString())))
+                if (!dayExisting(new SimpleDateFormat("yyyy-MM-dd").parse(datePicker.getValue().toString())))
                     this.mProgramLogic.createDay(datePicker.getValue().toString());
+                else {
+                    Alert error = new Alert(Alert.AlertType.ERROR);
+                    error.setTitle("Tag vorhaden");
+                    error.setHeaderText("Tag bereits vorhanden");
+                    error.setContentText("Ein Eintrag für diesen Tag existiert bereits und kann nicht doppelt " +
+                            "angelegt werden");
+                    error.showAndWait();
+                }
                 datePicker.setValue(null);
                 datePicker.setDisable(true);
             } else {
@@ -199,17 +206,11 @@ public class App extends Application implements Initializable {
     }
 
     private boolean dayExisting(Date date) {
-        Calendar cDateCalendar = Calendar.getInstance();
-        cDateCalendar.setTime(date);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         for (Day day : mProgramLogic.getDays()) {
-            Calendar temp = Calendar.getInstance();
-            temp.setTime(day.getDate());
-            System.out.println("NEW: " + date.toString() + " OLD: " + day.getDate().toString());
-            if (cDateCalendar.get(Calendar.YEAR) == temp.get(Calendar.YEAR) &&
-                    cDateCalendar.get(Calendar.DAY_OF_YEAR) == temp.get(Calendar.DAY_OF_YEAR)) {
-                System.out.println("EXISTING");
+            System.out.println(simpleDateFormat.format(date) + " - " + simpleDateFormat.format(day.getDate()));
+            if (simpleDateFormat.format(date).equals(simpleDateFormat.format(day.getDate())))
                 return true;
-            }
         }
         return false;
     }
@@ -234,7 +235,7 @@ public class App extends Application implements Initializable {
         } else {
             if (buttonCreateActivity.getText().equals("Abbrechen")) {
             } else {
-                  mProgramLogic.createActivity(tvDates.getSelectionModel().getSelectedItem().getId(), new Activity(textAreaDescription.getText(), Integer.parseInt(textAreaStress.getText()), Integer.parseInt(textAreaRelax.getText())));
+                mProgramLogic.createActivity(tvDates.getSelectionModel().getSelectedItem().getId(), new Activity(textAreaDescription.getText(), Integer.parseInt(textAreaStress.getText()), Integer.parseInt(textAreaRelax.getText())));
             }
             textAreaDescription.setText("");
             textAreaStress.setText("");
