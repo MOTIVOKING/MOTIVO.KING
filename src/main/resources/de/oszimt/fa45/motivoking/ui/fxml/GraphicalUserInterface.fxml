@@ -35,8 +35,8 @@
     </TableView>
     <ButtonBar layoutX="472.0" layoutY="500.0" prefHeight="31.0" prefWidth="418.0">
         <buttons>
-            <Button fx:id="btCreateActivity" disable="true" onAction="#onCreateActivity" prefHeight="31.0" prefWidth="216.0" text="Aktivität erstellen" />
-            <Button fx:id="" disable="true" onAction="#onAddActivity" prefHeight="31.0" prefWidth="132.0" text="Hinzufügen" />
+            <Button fx:id="buttonCreateActivity" disable="true" onAction="#onCreateActivity" prefHeight="31.0" prefWidth="216.0" text="Aktivität erstellen" />
+            <Button fx:id="buttonAddActivityToDay" disable="true" onAction="#onAddActivity" prefHeight="31.0" prefWidth="132.0" text="Hinzufügen" />
         </buttons>
     </ButtonBar>
     <GridPane layoutX="282.0" layoutY="467.0" prefHeight="60.0" prefWidth="194.0">

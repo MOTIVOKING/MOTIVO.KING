@@ -9,8 +9,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,12 +22,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -52,7 +48,7 @@ public class App extends Application implements Initializable {
     @FXML
     private DatePicker datePicker;
     @FXML
-    private Button buttonAddDay, btCreateActivity;
+    private Button buttonAddDay, buttonCreateActivity, buttonAddActivityToDay;
 
     @FXML
     private Label labelSelectedDate;
@@ -102,6 +98,7 @@ public class App extends Application implements Initializable {
             Platform.runLater(() -> labelSelectedDate.setText(newValue.getDate() == null ? "null" : new SimpleDateFormat("dd.MM.yyyy").format(newValue.getDate())));
             ObservableList<Activity> activities = FXCollections.observableArrayList(mProgramLogic.getActivities(newValue.getId()));
             tvActivities.setItems(activities);
+            buttonCreateActivity.setDisable(false);
         });
         textAreaDescription.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\n"))
@@ -119,7 +116,7 @@ public class App extends Application implements Initializable {
         });
 
         InvalidationListener listener = observableValue -> {
-            btCreateActivity.setText(textAreaDescription.getText().isEmpty() || textAreaStress.getText().isEmpty() || textAreaRelax.getText().isEmpty() ? "Abbrechen" : "Speichern");
+            buttonCreateActivity.setText(textAreaDescription.getText().isEmpty() || textAreaStress.getText().isEmpty() || textAreaRelax.getText().isEmpty() ? "Abbrechen" : "Speichern");
         };
 
         textAreaDescription.textProperty().addListener(listener);
@@ -131,6 +128,9 @@ public class App extends Application implements Initializable {
         ObservableList<String> a = FXCollections.observableArrayList();
         mProgramLogic.getAllActivities().forEach(activity -> a.add(activity.getName()));
         comboBoxAllActivities.setItems(a);
+        comboBoxAllActivities.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            buttonAddActivityToDay.setDisable(newValue == null);
+        });
     }
 
     private void initActivityTable() {
@@ -230,20 +230,20 @@ public class App extends Application implements Initializable {
             textAreaDescription.setDisable(false);
             textAreaStress.setDisable(false);
             textAreaRelax.setDisable(false);
-            btCreateActivity.setText("Abbrechen");
+            buttonCreateActivity.setText("Abbrechen");
 //            datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
 //                buttonAddDay.setText(newValue == null ? "Abbrechen" : "Speichern");
 //            });
         } else {
-            if (!textAreaDescription.getText().isEmpty()) {
+            if (buttonCreateActivity.getText().equals("Abbrechen")) {
             } else {
-                textAreaDescription.setDisable(true);
-                textAreaStress.setDisable(true);
-                textAreaRelax.setDisable(true);
+                  mProgramLogic.createActivity(tvDates.getSelectionModel().getSelectedItem().getId(), new Activity(textAreaDescription.getText(), Integer.parseInt(textAreaStress.getText()), Integer.parseInt(textAreaRelax.getText())));
             }
-            buttonAddDay.setText("Tag hinzufügen");
-            initDays();
-            Error.print();
+            textAreaDescription.setText("");
+            textAreaStress.setText("");
+            textAreaRelax.setText("");
+            buttonCreateActivity.setText("Aktivität erstellen");
+            initActivities();
         }
     }
 
