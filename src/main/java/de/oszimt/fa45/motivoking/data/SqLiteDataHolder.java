@@ -10,6 +10,7 @@ import de.oszimt.fa45.motivoking.model.DayActivity;
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 /**
  * Created by boerg on 13.10.2016.
@@ -53,30 +54,6 @@ public class SqLiteDataHolder implements DataHolder {
     }
 
 
-    private SqLiteData read(String query) {
-        SqLiteData data = new SqLiteData();
-        connect();
-
-        try {
-            statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(query);
-            ResultSetMetaData meta = rs.getMetaData();
-
-            while(rs.next()) {
-
-                // TODO
-            }
-
-
-        } catch (SQLException e) {
-            Error.set("Could not read the query correctly.");
-        }
-
-        close();
-        return data;
-    }
-
-
     private long write(String query, boolean isInsert) {
         long id = 0;
         connect();
@@ -94,7 +71,7 @@ public class SqLiteDataHolder implements DataHolder {
                 connection.commit();
             } catch (SQLException e) {
                 Error.set("Data could not be inserted to SQL DB.");
-                System.out.println( e.getMessage() );
+                Error.set(query);
             }
         }
         close();
@@ -156,7 +133,26 @@ public class SqLiteDataHolder implements DataHolder {
         qb.select("id").from("days").where("id", "=", String.valueOf(dayId));
 
         String query = qb.getQuery();
-        return this.read(query).getDays().stream().findFirst().orElse(null);
+
+        Day d = null;
+
+        connect();
+        try {
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            while(rs.next()) {
+                d = new Day();
+                d.setDate( new Date(rs.getString("date")) );
+                break;
+            }
+
+        } catch (SQLException e) {
+            Error.set("Could not read the query correctly. [day by id]");
+        }
+        close();
+
+        return d != null ? d : null;
     }
 
     @Override
@@ -164,7 +160,27 @@ public class SqLiteDataHolder implements DataHolder {
         qb.select("*").from("days");
 
         String query = qb.getQuery();
-        return this.read(query).getDays();
+
+        List<Day> days = new ArrayList<>();
+
+        connect();
+        try {
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            while(rs.next()) {
+                Day d = new Day();
+                d.setDate( new Date(rs.getString("date")) );
+
+                days.add(d);
+            }
+
+        } catch (SQLException e) {
+            Error.set("Could not read the query correctly. [all days]");
+        }
+        close();
+
+        return days;
     }
 
     @Override
@@ -178,7 +194,32 @@ public class SqLiteDataHolder implements DataHolder {
         qb.select("a.*").from("activities as a, dayActivities as dA").where("dA.dayId", "=", String.valueOf(dayId));
 
         String query = qb.getQuery();
-        return this.read(query).getActivities();
+
+        List<Activity> activities = new ArrayList<>();
+
+        connect();
+        try {
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            while(rs.next()) {
+                Activity a = new Activity(
+                        rs.getString("name"),
+                        rs.getInt("stressLevel"),
+                        rs.getInt("relaxLevel")
+                );
+
+                a.setId(rs.getLong("id"));
+
+                activities.add(a);
+            }
+
+        } catch (SQLException e) {
+            Error.set("Could not read the query correctly. [find act by id]");
+        }
+        close();
+
+        return activities;
     }
 
     @Override
@@ -186,7 +227,27 @@ public class SqLiteDataHolder implements DataHolder {
         qb.select("*").from("activities");
 
         String query = qb.getQuery();
-        return this.read(query).getDayActivities();
+
+        List<DayActivity> dayActivities = new ArrayList<>();
+
+        connect();
+        try {
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            while(rs.next()) {
+
+                DayActivity dA = new DayActivity(rs.getLong("dayId"), rs.getLong("activityId"));
+
+                dayActivities.add(dA);
+            }
+
+        } catch (SQLException e) {
+            Error.set("Could not read the query correctly. [find all act]");
+        }
+        close();
+
+        return dayActivities;
     }
 
     @Override
@@ -194,7 +255,31 @@ public class SqLiteDataHolder implements DataHolder {
         qb.select("*").from("activities").where("id", "=", String.valueOf(id));
 
         String query = qb.getQuery();
-        return this.read(query).getActivities().get(0);
+
+        Activity activity = null;
+
+        connect();
+        try {
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            while(rs.next()) {
+
+                activity = new Activity(
+                        rs.getString("name"),
+                        rs.getInt("stressLevel"),
+                        rs.getInt("relaxLevel")
+                );
+
+                break;
+            }
+
+        } catch (SQLException e) {
+            Error.set("Could not read the query correctly. [act]");
+        }
+        close();
+
+        return activity;
     }
 
     @Override
@@ -211,6 +296,7 @@ public class SqLiteDataHolder implements DataHolder {
             Error.set("Cannot get fields of the specified model.");
             return;
         }
+
         qb.insertInto("days").values(map, true);
 
         String query = qb.getQuery();
@@ -227,9 +313,29 @@ public class SqLiteDataHolder implements DataHolder {
         qb.select("id").from("days").where("id", "=", String.valueOf(dayId));
 
         query = qb.getQuery();
-        SqLiteData tmp = this.read(query);
 
-        if(tmp.getDays().size() < 1) {
+        List<Day> days = new ArrayList<>();
+
+        connect();
+        try {
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            while(rs.next()) {
+
+                Day d = new Day();
+                d.setDate( new Date(rs.getString("date").toString()) );
+                days.add(d);
+
+                break;
+            }
+
+        } catch (SQLException e) {
+            Error.set("Could not read the query correctly. [add act to days]");
+        }
+        close();
+
+        if(days.size() < 1) {
             Error.set("Day not found!");
             return;
         }
