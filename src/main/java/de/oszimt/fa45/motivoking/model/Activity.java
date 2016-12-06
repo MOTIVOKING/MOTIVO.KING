@@ -13,6 +13,9 @@ public class Activity extends Model {
     private int stressLevel;
     private int relaxLevel;
 
+    public Activity() {
+    }
+
 
     public final long getId() {
         return id;
@@ -62,5 +65,10 @@ public class Activity extends Model {
      */
     public int getRelaxLevel() {
         return relaxLevel;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

@@ -7,6 +7,7 @@ import de.oszimt.fa45.motivoking.model.Day;
 import de.oszimt.fa45.motivoking.ui.GraphicalUserInterface;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,6 +33,12 @@ import java.util.ResourceBundle;
  */
 public class App extends Application implements Initializable {
 
+    @FXML
+    private TextArea textAreaRelax, textAreaStress, textAreaDescription;
+    @FXML
+    private ComboBox<Activity> comboBoxAllActivities;
+    @FXML
+    private Label txtStresslevel, txtRelaxlevel;
     private Stage mPrimaryStage;
 
     @FXML
@@ -41,7 +48,7 @@ public class App extends Application implements Initializable {
     @FXML
     private DatePicker datePicker;
     @FXML
-    private Button buttonAddDay;
+    private Button buttonAddDay, buttonCreateActivity, buttonAddActivityToDay;
 
     @FXML
     private Label labelSelectedDate;
@@ -86,17 +93,48 @@ public class App extends Application implements Initializable {
 
         initDays();
         initActivityTable();
+        initActivities();
         tvDates.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Platform.runLater(() -> labelSelectedDate.setText(newValue.getDate() == null ? "null" : new SimpleDateFormat("dd.MM.yyyy").format(newValue.getDate())));
-            ObservableList<Activity> activities = FXCollections.observableArrayList(mProgramLogic.getActivities(newValue.getId()));
-            tvActivities.setItems(activities);
+            refreshDayDetails();
+            buttonCreateActivity.setDisable(false);
+        });
+        textAreaDescription.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\n"))
+                textAreaDescription.setText(newValue.replace("\n", ""));
+        });
+        textAreaRelax.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                textAreaRelax.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+        textAreaStress.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                textAreaStress.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        InvalidationListener listener = observableValue -> {
+            buttonCreateActivity.setText(textAreaDescription.getText().isEmpty() || textAreaStress.getText().isEmpty() || textAreaRelax.getText().isEmpty() ? "Abbrechen" : "Speichern");
+        };
+
+        textAreaDescription.textProperty().addListener(listener);
+        textAreaRelax.textProperty().addListener(listener);
+        textAreaStress.textProperty().addListener(listener);
+    }
+
+    private void initActivities() {
+        ObservableList<Activity> a = FXCollections.observableArrayList(mProgramLogic.getAllActivities());
+        comboBoxAllActivities.setItems(a);
+        comboBoxAllActivities.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            buttonAddActivityToDay.setDisable(newValue == null);
         });
     }
 
     private void initActivityTable() {
         tcActivity.setCellValueFactory(item -> new SimpleStringProperty(item.getValue().getName()));
         tcRelax.setCellValueFactory(item -> new SimpleStringProperty(Integer.toString(item.getValue().getRelaxLevel())));
-        tcActivity.setCellValueFactory(item -> new SimpleStringProperty(Integer.toString(item.getValue().getRelaxLevel())));
+        tcStress.setCellValueFactory(item -> new SimpleStringProperty(Integer.toString(item.getValue().getStressLevel())));
     }
 
 
@@ -124,10 +162,6 @@ public class App extends Application implements Initializable {
     private void initDays() {
         ObservableList<Day> observableDays = FXCollections.observableArrayList(mProgramLogic.getDays());
         System.out.println(observableDays.toString());
-
-        observableDays.add(new Day(new Date()));
-
-        System.out.println(observableDays.toString());
         tvDates.setItems(observableDays);
         column_date.setCellValueFactory(param -> {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
@@ -150,8 +184,16 @@ public class App extends Application implements Initializable {
             });
         } else {
             if (datePicker.getValue() != null) {
-                if (!dayExisting(new SimpleDateFormat("yyyy-mm-dd").parse(datePicker.getValue().toString())))
+                if (!dayExisting(new SimpleDateFormat("yyyy-MM-dd").parse(datePicker.getValue().toString())))
                     this.mProgramLogic.createDay(datePicker.getValue().toString());
+                else {
+                    Alert error = new Alert(Alert.AlertType.ERROR);
+                    error.setTitle("Tag vorhaden");
+                    error.setHeaderText("Tag bereits vorhanden");
+                    error.setContentText("Ein Eintrag für diesen Tag existiert bereits und kann nicht doppelt " +
+                            "angelegt werden");
+                    error.showAndWait();
+                }
                 datePicker.setValue(null);
                 datePicker.setDisable(true);
             } else {
@@ -164,36 +206,59 @@ public class App extends Application implements Initializable {
     }
 
     private boolean dayExisting(Date date) {
-        Calendar cDateCalendar = Calendar.getInstance();
-        cDateCalendar.setTime(date);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         for (Day day : mProgramLogic.getDays()) {
-            Calendar temp = Calendar.getInstance();
-            temp.setTime(day.getDate());
-            System.out.println("NEW: " + date.toString() + " OLD: " + day.getDate().toString());
-            if (cDateCalendar.get(Calendar.YEAR) == temp.get(Calendar.YEAR) &&
-                    cDateCalendar.get(Calendar.DAY_OF_YEAR) == temp.get(Calendar.DAY_OF_YEAR)) {
-                System.out.println("EXISTING");
+            System.out.println(simpleDateFormat.format(date) + " - " + simpleDateFormat.format(day.getDate()));
+            if (simpleDateFormat.format(date).equals(simpleDateFormat.format(day.getDate())))
                 return true;
-            }
         }
         return false;
     }
 
 
     @FXML
-    private void onAddAction(ActionEvent actionEvent) {
-        
+    private void onAddActivity() {
+        mProgramLogic.addActivity(tvDates.getSelectionModel().getSelectedItem().getId(), comboBoxAllActivities.getSelectionModel().getSelectedItem().getId());
+        refreshDayDetails();
     }
 
-
     @FXML
-    private void onRemoveAction(ActionEvent actionEvent) {
-
+    private void onCreateActivity(ActionEvent actionEvent) {
+        if (textAreaDescription.isDisabled()) {
+            textAreaDescription.setDisable(false);
+            textAreaStress.setDisable(false);
+            textAreaRelax.setDisable(false);
+            buttonCreateActivity.setText("Abbrechen");
+//            datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+//                buttonAddDay.setText(newValue == null ? "Abbrechen" : "Speichern");
+//            });
+        } else {
+            if (buttonCreateActivity.getText().equals("Abbrechen")) {
+            } else {
+                mProgramLogic.createActivity(tvDates.getSelectionModel().getSelectedItem().getId(), new Activity(textAreaDescription.getText(), Integer.parseInt(textAreaStress.getText()), Integer.parseInt(textAreaRelax.getText())));
+            }
+            textAreaDescription.setText("");
+            textAreaStress.setText("");
+            textAreaRelax.setText("");
+            textAreaDescription.setDisable(true);
+            textAreaStress.setDisable(true);
+            textAreaRelax.setDisable(true);
+            buttonCreateActivity.setText("Aktivität erstellen");
+            refreshDayDetails();
+        }
     }
 
-
-    @FXML
-    private void onChangeAction(ActionEvent actionEvent) {
-
+    private void refreshDayDetails() {
+        Day day = mProgramLogic.getDay(tvDates.getSelectionModel().getSelectedItem().getId());
+        ObservableList<Activity> a = FXCollections.observableArrayList(mProgramLogic.getActivities(day.getId()));
+        tvActivities.setItems(a);
+        int stress = 0;
+        int relax = 0;
+        for (Activity activity : a) {
+            stress = stress + activity.getStressLevel();
+            relax = relax + activity.getRelaxLevel();
+        }
+        txtRelaxlevel.setText(Integer.toString(relax));
+        txtStresslevel.setText(Integer.toString(stress));
     }
 }

@@ -13,13 +13,23 @@ public class DayActivity extends Model {
         dayId = t_dayId;
     }
 
+    public DayActivity() {
+    }
+
 
     public long getActivityId() {
         return activityId;
     }
 
-
     public long getDayId() {
         return dayId;
+    }
+
+    public void setActivityId(long activityId) {
+        this.activityId = activityId;
+    }
+
+    public void setDayId(long dayId) {
+        this.dayId = dayId;
     }
 }
