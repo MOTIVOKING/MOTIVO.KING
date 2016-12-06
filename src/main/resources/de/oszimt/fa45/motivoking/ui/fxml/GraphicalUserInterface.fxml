@@ -50,8 +50,8 @@
         </rowConstraints>
         <Label text="Stresslevel" />
         <Label prefHeight="21.0" prefWidth="176.0" text="Entspannungslevel" GridPane.rowIndex="1" />
-        <Label fx:id="txtStresslevel" text="99" GridPane.columnIndex="1" />
-        <Label fx:id="txtRelaxlevel" text="99" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Label fx:id="txtStresslevel" text=" " GridPane.columnIndex="1" />
+        <Label fx:id="txtRelaxlevel" text=" " GridPane.columnIndex="1" GridPane.rowIndex="1" />
     </GridPane>
     <ComboBox fx:id="comboBoxAllActivities" layoutX="495.0" layoutY="467.0" prefHeight="31.0" prefWidth="395.0" />
     <TextArea fx:id="textAreaRelax" disable="true" layoutX="838.0" layoutY="538.0" prefHeight="13.0" prefWidth="28.0" />
