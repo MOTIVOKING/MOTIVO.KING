@@ -97,7 +97,7 @@ public class App extends Application implements Initializable {
         tvDates.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Platform.runLater(() -> labelSelectedDate.setText(newValue.getDate() == null ? "null" : new SimpleDateFormat("dd.MM.yyyy").format(newValue.getDate())));
             ObservableList<Activity> activities = FXCollections.observableArrayList(mProgramLogic.getActivities(newValue.getId()));
-            tvActivities.setItems(activities);
+            refreshDayDetails();
             buttonCreateActivity.setDisable(false);
         });
         textAreaDescription.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -243,8 +243,21 @@ public class App extends Application implements Initializable {
             textAreaStress.setDisable(true);
             textAreaRelax.setDisable(true);
             buttonCreateActivity.setText("Aktivität erstellen");
-            initActivities();
-            initActivityTable();
+            refreshDayDetails();
         }
+    }
+
+    private void refreshDayDetails() {
+        Day day = mProgramLogic.getDay(tvDates.getSelectionModel().getSelectedItem().getId());
+        ObservableList<Activity> a = FXCollections.observableArrayList(mProgramLogic.getActivities(day.getId()));
+        tvActivities.setItems(a);
+        int stress = 0;
+        int relax = 0;
+        for (Activity activity : a) {
+            stress = stress + activity.getStressLevel();
+            relax = relax + activity.getRelaxLevel();
+        }
+        txtRelaxlevel.setText(Integer.toString(relax));
+        txtStresslevel.setText(Integer.toString(stress));
     }
 }
