@@ -218,7 +218,7 @@ public class App extends Application implements Initializable {
     @FXML
     private void onAddActivity() {
         mProgramLogic.addActivity(tvDates.getSelectionModel().getSelectedItem().getId(), comboBoxAllActivities.getSelectionModel().getSelectedItem().getId());
-        initActivityTable();
+        refreshDayDetails();
     }
 
     @FXML
