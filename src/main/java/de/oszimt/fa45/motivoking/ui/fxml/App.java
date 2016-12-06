@@ -7,7 +7,10 @@ import de.oszimt.fa45.motivoking.model.Day;
 import de.oszimt.fa45.motivoking.ui.GraphicalUserInterface;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,10 +24,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -32,8 +37,12 @@ import java.util.ResourceBundle;
  */
 public class App extends Application implements Initializable {
 
-    @FXML private ComboBox<String> comboBoxAllActivities;
-    @FXML private Label txtStresslevel,  txtRelaxlevel;
+    @FXML
+    private TextArea textAreaRelax, textAreaStress, textAreaDescription;
+    @FXML
+    private ComboBox<String> comboBoxAllActivities;
+    @FXML
+    private Label txtStresslevel, txtRelaxlevel;
     private Stage mPrimaryStage;
 
     @FXML
@@ -94,6 +103,28 @@ public class App extends Application implements Initializable {
             ObservableList<Activity> activities = FXCollections.observableArrayList(mProgramLogic.getActivities(newValue.getId()));
             tvActivities.setItems(activities);
         });
+        textAreaDescription.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\n"))
+                textAreaDescription.setText(newValue.replace("\n", ""));
+        });
+        textAreaRelax.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                textAreaRelax.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+        textAreaStress.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                textAreaStress.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        InvalidationListener listener = observableValue -> {
+            btCreateActivity.setText(textAreaDescription.getText().isEmpty() || textAreaStress.getText().isEmpty() || textAreaRelax.getText().isEmpty() ? "Abbrechen" : "Speichern");
+        };
+
+        textAreaDescription.textProperty().addListener(listener);
+        textAreaRelax.textProperty().addListener(listener);
+        textAreaStress.textProperty().addListener(listener);
     }
 
     private void initActivities() {
@@ -190,24 +221,33 @@ public class App extends Application implements Initializable {
 
 
     @FXML
-    private void onAddActivity(ActionEvent actionEvent) {
+    private void onAddActivity() {
     }
-
 
     @FXML
-    private void onRemoveAction(ActionEvent actionEvent) {
-
+    private void onCreateActivity(ActionEvent actionEvent) {
+        if (textAreaDescription.isDisabled()) {
+            textAreaDescription.setDisable(false);
+            textAreaStress.setDisable(false);
+            textAreaRelax.setDisable(false);
+            btCreateActivity.setText("Abbrechen");
+//            datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+//                buttonAddDay.setText(newValue == null ? "Abbrechen" : "Speichern");
+//            });
+        } else {
+            if (!textAreaDescription.getText().isEmpty()) {
+            } else {
+                textAreaDescription.setDisable(true);
+                textAreaStress.setDisable(true);
+                textAreaRelax.setDisable(true);
+            }
+            buttonAddDay.setText("Tag hinzufügen");
+            initDays();
+            Error.print();
+        }
     }
-
 
     @FXML
-    private void onChangeAction(ActionEvent actionEvent) {
-
-    }
-
-    @FXML private void onCreateActivity(ActionEvent actionEvent) {
-    }
-
-    @FXML private void selectedActivityChanged(ActionEvent actionEvent) {
+    private void selectedActivityChanged(ActionEvent actionEvent) {
     }
 }
