@@ -35,17 +35,17 @@ public class SqLiteData extends Data {
         }
 
         tableQuery += "CREATE TABLE IF NOT EXISTS activities (";
-        tableQuery += "id            INT PRIMARY KEY NOT NULL, ";
+        tableQuery += "id            INTEGER PRIMARY KEY AUTOINCREMENT, ";
         tableQuery += "name          TEXT(50) NOT NULL, ";
         tableQuery += "stressLevel   INT(4) NOT NULL, ";
         tableQuery += "relaxLevel    INT(4) NOT NULL);";
 
         tableQuery += "CREATE TABLE IF NOT EXISTS days (";
-        tableQuery += "date          DATE NOT NULL, ";
-        tableQuery += "activities    ARRAY NOT NULL);";
+        tableQuery += "id            INTEGER PRIMARY KEY AUTOINCREMENT, ";
+        tableQuery += "date          DATE NOT NULL);";
 
         tableQuery += "CREATE TABLE IF NOT EXISTS dayActivities (";
-        tableQuery += "id            INT PRIMARY KEY NOT NULL, ";
+        tableQuery += "id            INTEGER PRIMARY KEY AUTOINCREMENT, ";
         tableQuery += "activityId    INT NOT NULL, ";
         tableQuery += "dayId         INT NOT NULL);";
     }

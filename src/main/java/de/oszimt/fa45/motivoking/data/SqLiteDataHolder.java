@@ -289,13 +289,8 @@ public class SqLiteDataHolder implements DataHolder {
 
     @Override
     public void addDay(Day day) {
-        Map<String, String> map = null;
-        try {
-            map = getFields(day);
-        } catch (IllegalAccessException e) {
-            Error.set("Cannot get fields of the specified model.");
-            return;
-        }
+        Map<String, String> map = new HashMap<>();
+        map.put("date", day.getDate().toString());
 
         qb.insertInto("days").values(map, true);
 
@@ -306,7 +301,7 @@ public class SqLiteDataHolder implements DataHolder {
     @Override
     public void addActivity(long dayId, Activity activity) {
         String query;
-        Map<String, String> map;
+        Map<String, String> map = new HashMap<>();
         Field[] fields;
 
         // check if day exists
@@ -341,12 +336,10 @@ public class SqLiteDataHolder implements DataHolder {
         }
 
         // add activity
-        try {
-            map = getFields(activity);
-        } catch (IllegalAccessException e) {
-            Error.set("Cannot get fields of the specified model.");
-            return;
-        }
+        map.put("name", activity.getName());
+        map.put("stressLevel", String.valueOf(activity.getStressLevel()));
+        map.put("relaxLevel", String.valueOf(activity.getRelaxLevel()));
+
         qb.insertInto("activity").values(map, true);
 
         query = qb.getQuery();
@@ -354,12 +347,8 @@ public class SqLiteDataHolder implements DataHolder {
 
         // add to merge table
         DayActivity dA = new DayActivity(dayId, activityId);
-        try {
-            map = getFields(dA);
-        } catch (IllegalAccessException e) {
-            Error.set("Cannot get fields of the specified model.");
-            return;
-        }
+        map.put("dayId", String.valueOf(dA.getDayId()));
+        map.put("activityId", String.valueOf(dA.getActivityId()));
 
         qb.insertInto("dayActivities").values(map, true);
 
@@ -376,16 +365,5 @@ public class SqLiteDataHolder implements DataHolder {
 
         String query = qb.getQuery();
         this.write(query, true);
-    }
-
-    private <T> Map<String, String> getFields(T entity) throws IllegalAccessException {
-        Map<String, String> map = new TreeMap<>();
-        Field[] fields = entity.getClass().getFields();
-
-        for(Field f : fields) {
-            map.put(f.getName(), (String) f.get(entity));
-        }
-
-        return map;
     }
 }

@@ -76,7 +76,7 @@ public class QueryBuilder {
 
         for(Map.Entry<String, String> m : map.entrySet()) {
             queryKeysList.add(m.getKey());
-            queryValuesList.add(m.getValue());
+            queryValuesList.add("'" + m.getValue() + "'");
         }
 
         String queryKeys = queryKeysList.stream().collect(Collectors.joining(","));
