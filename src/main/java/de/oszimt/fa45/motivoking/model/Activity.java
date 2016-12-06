@@ -63,4 +63,9 @@ public class Activity extends Model {
     public int getRelaxLevel() {
         return relaxLevel;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

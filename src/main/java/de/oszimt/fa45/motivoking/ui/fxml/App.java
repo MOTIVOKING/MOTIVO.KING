@@ -36,7 +36,7 @@ public class App extends Application implements Initializable {
     @FXML
     private TextArea textAreaRelax, textAreaStress, textAreaDescription;
     @FXML
-    private ComboBox<String> comboBoxAllActivities;
+    private ComboBox<Activity> comboBoxAllActivities;
     @FXML
     private Label txtStresslevel, txtRelaxlevel;
     private Stage mPrimaryStage;
@@ -125,8 +125,7 @@ public class App extends Application implements Initializable {
     }
 
     private void initActivities() {
-        ObservableList<String> a = FXCollections.observableArrayList();
-        mProgramLogic.getAllActivities().forEach(activity -> a.add(activity.getName()));
+        ObservableList<Activity> a = FXCollections.observableArrayList(mProgramLogic.getAllActivities());
         comboBoxAllActivities.setItems(a);
         comboBoxAllActivities.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             buttonAddActivityToDay.setDisable(newValue == null);
@@ -163,10 +162,6 @@ public class App extends Application implements Initializable {
      */
     private void initDays() {
         ObservableList<Day> observableDays = FXCollections.observableArrayList(mProgramLogic.getDays());
-        System.out.println(observableDays.toString());
-
-        observableDays.add(new Day(new Date()));
-
         System.out.println(observableDays.toString());
         tvDates.setItems(observableDays);
         column_date.setCellValueFactory(param -> {
@@ -222,7 +217,8 @@ public class App extends Application implements Initializable {
 
     @FXML
     private void onAddActivity() {
-        mProgramLogic.
+        mProgramLogic.addActivity(tvDates.getSelectionModel().getSelectedItem().getId(), comboBoxAllActivities.getSelectionModel().getSelectedItem().getId());
+        initActivityTable();
     }
 
     @FXML
