@@ -136,7 +136,7 @@ public class App extends Application implements Initializable {
     private void initActivityTable() {
         tcActivity.setCellValueFactory(item -> new SimpleStringProperty(item.getValue().getName()));
         tcRelax.setCellValueFactory(item -> new SimpleStringProperty(Integer.toString(item.getValue().getRelaxLevel())));
-        tcActivity.setCellValueFactory(item -> new SimpleStringProperty(Integer.toString(item.getValue().getRelaxLevel())));
+        tcStress.setCellValueFactory(item -> new SimpleStringProperty(Integer.toString(item.getValue().getStressLevel())));
     }
 
 
@@ -222,6 +222,7 @@ public class App extends Application implements Initializable {
 
     @FXML
     private void onAddActivity() {
+        mProgramLogic.
     }
 
     @FXML
@@ -242,12 +243,12 @@ public class App extends Application implements Initializable {
             textAreaDescription.setText("");
             textAreaStress.setText("");
             textAreaRelax.setText("");
+            textAreaDescription.setDisable(true);
+            textAreaStress.setDisable(true);
+            textAreaRelax.setDisable(true);
             buttonCreateActivity.setText("Aktivität erstellen");
             initActivities();
+            initActivityTable();
         }
-    }
-
-    @FXML
-    private void selectedActivityChanged(ActionEvent actionEvent) {
     }
 }
