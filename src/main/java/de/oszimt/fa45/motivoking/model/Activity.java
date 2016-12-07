@@ -1,20 +1,13 @@
 package de.oszimt.fa45.motivoking.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 /**
  * Created by boerg on 13.10.2016.
  */
-@Entity
-@Table(name = "activities")
 public class Activity extends Model {
 
     public static final int MAX_LEVEL = 9999;
     public static final int MIN_LEVEL = -9999;
 
-    @Id
     private long id;
     private String name;
     private int stressLevel;

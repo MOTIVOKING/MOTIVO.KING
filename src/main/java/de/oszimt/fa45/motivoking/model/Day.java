@@ -1,18 +1,12 @@
 package de.oszimt.fa45.motivoking.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
  * Created by boerg on 13.10.2016.
  */
-@Entity
-@Table(name = "days")
 public class Day extends Model {
 
-    @Id
     private long id;
     private Date date;
 
