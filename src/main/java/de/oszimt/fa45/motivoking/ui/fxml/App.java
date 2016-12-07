@@ -30,6 +30,8 @@ import java.util.ResourceBundle;
 
 /**
  * Created by RedCyberSamurai on 22.11.2016.
+ *
+ * Main Application-Class that will launch the Graphical User Interface
  */
 public class App extends Application implements Initializable {
 
@@ -61,7 +63,7 @@ public class App extends Application implements Initializable {
 
 
     /**
-     * App constructor, initializing tables
+     * App constructor
      */
     public App() {
     }
@@ -69,6 +71,7 @@ public class App extends Application implements Initializable {
 
     /**
      * Main JavaFx hook
+     * loads the fxml
      *
      * @param tPrimaryStage
      * @throws Exception
@@ -83,6 +86,14 @@ public class App extends Application implements Initializable {
 
 
     /**
+     * hook after fxml is loaded. this initializes the tables in the ui,
+     * loads the days from the program-logic and all available activities
+     *
+     * the selection-change-listener for the days-tableview is set here,
+     * also this initializes listeners for the textareas that will only allow correct
+     * content when creating new activities and enable or disable the
+     * parts of the ui that is neede / not needed
+     *
      * @param location
      * @param resources
      */
@@ -123,6 +134,9 @@ public class App extends Application implements Initializable {
         textAreaStress.textProperty().addListener(listener);
     }
 
+    /**
+     * fills the combobox with all known activities
+     */
     private void initActivities() {
         ObservableList<Activity> a = FXCollections.observableArrayList(mProgramLogic.getAllActivities());
         comboBoxAllActivities.setItems(a);
@@ -131,6 +145,10 @@ public class App extends Application implements Initializable {
         });
     }
 
+    /**
+     * sets the CellValueFactories for the activity table.
+     * this is neede to only set all items to the tableview and it fills itself
+     */
     private void initActivityTable() {
         tcActivity.setCellValueFactory(item -> new SimpleStringProperty(item.getValue().getName()));
         tcRelax.setCellValueFactory(item -> new SimpleStringProperty(Integer.toString(item.getValue().getRelaxLevel())));
@@ -139,7 +157,7 @@ public class App extends Application implements Initializable {
 
 
     /**
-     *
+     * load the  fxml
      */
     private void initRootLayout() {
         System.out.println(getClass());
@@ -157,7 +175,7 @@ public class App extends Application implements Initializable {
     }
 
     /**
-     *
+     * loads all days and shows them inside the tableview
      */
     private void initDays() {
         ObservableList<Day> observableDays = FXCollections.observableArrayList(mProgramLogic.getDays());
@@ -170,12 +188,16 @@ public class App extends Application implements Initializable {
     }
 
 
-    // ---------------------------------------------------------
-    // NOTE: How about separate controllers??? (wall of text...)
-
-
+    /**
+     * FXML-Eventhandler that fires when the user clicks the button to add a day.
+     * the controller will enable the the datepicker if it is not still enabled
+     * disable it if it is enabled but no date is selected or create the new day
+     * if any day is chosen in the Datepicker.
+     *
+     * @throws ParseException
+     */
     @FXML
-    private void onAddDay(ActionEvent actionEvent) throws ParseException {
+    private void onAddDay() throws ParseException {
         if (datePicker.isDisabled()) {
             datePicker.setDisable(false);
             buttonAddDay.setText("Abbrechen");
@@ -205,6 +227,13 @@ public class App extends Application implements Initializable {
         }
     }
 
+    /**
+     * this method checks if a selected date already exists in the lsit of days to avoid
+     * double entries.
+     *
+     * @param date - the selected date that should be checked
+     * @return true if any entry for the same day is existig or false if not
+     */
     private boolean dayExisting(Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         for (Day day : mProgramLogic.getDays()) {
@@ -216,14 +245,26 @@ public class App extends Application implements Initializable {
     }
 
 
+    /**
+     * FXML Eventhandler that fires if the user selected a activity and clicked the button
+     * to add it to any day. it is not neccessary to check if any activity is selected
+     * because the button will only be enabled if any is selected.
+     */
     @FXML
     private void onAddActivity() {
         mProgramLogic.addActivity(tvDates.getSelectionModel().getSelectedItem().getId(), comboBoxAllActivities.getSelectionModel().getSelectedItem().getId());
         refreshDayDetails();
     }
 
+    /**
+     * FXML Eventhandler that fires if the user clicks to create a new activity
+     * if the input fiels are disabled this will enable them
+     * if not all fiels are filled it will cancel creating the new activity
+     * and if all input fields are filled it will give the data to the programlogic to
+     * finish creating the activity
+     */
     @FXML
-    private void onCreateActivity(ActionEvent actionEvent) {
+    private void onCreateActivity() {
         if (textAreaDescription.isDisabled()) {
             textAreaDescription.setDisable(false);
             textAreaStress.setDisable(false);
@@ -248,6 +289,10 @@ public class App extends Application implements Initializable {
         }
     }
 
+    /**
+     * if an entry for a day is changed or the user selected another day
+     * this method will refresh all details that are shown for the selected day
+     */
     private void refreshDayDetails() {
         Day day = mProgramLogic.getDay(tvDates.getSelectionModel().getSelectedItem().getId());
         ObservableList<Activity> a = FXCollections.observableArrayList(mProgramLogic.getActivities(day.getId()));
