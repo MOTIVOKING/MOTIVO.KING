@@ -205,6 +205,7 @@ public class JSONDataHolder implements DataHolder {
                 mActivities.add(t_activity);
 
                 DayActivity dA = new DayActivity(t_dayId, t_activity.getId());
+                dA.setId( mData.getAI("dayActivity") );
                 mDayActivities.add(dA);
 
                 this.write( mGson.toJson(mData) );
@@ -228,6 +229,7 @@ public class JSONDataHolder implements DataHolder {
             if(this.findDayById(dayId) != null && this.findActivityById(activityId) != null) {
 
                 DayActivity dA = new DayActivity(dayId, activityId);
+                dA.setId( mData.getAI("dayActivity") );
                 mDayActivities.add(dA);
             } else {
                 Error.set("Activity not added. No day found.");
