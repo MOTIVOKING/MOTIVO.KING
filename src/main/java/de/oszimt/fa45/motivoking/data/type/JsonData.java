@@ -10,6 +10,7 @@ public class JsonData extends Data {
 
     private long dayAI = 0;
     private long activityAI = 0;
+    private long dayActivityAI = 0;
 
 
     public JsonData() {}
@@ -26,6 +27,10 @@ public class JsonData extends Data {
             case "activity":
                 activityAI++;
                 ai = activityAI;
+                break;
+            case "dayActivity":
+                dayActivityAI++;
+                ai = dayActivityAI;
                 break;
             default:
                 Error.set("AI of table " + s + " not found.");

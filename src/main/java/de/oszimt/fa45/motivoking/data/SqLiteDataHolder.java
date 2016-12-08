@@ -9,6 +9,9 @@ import de.oszimt.fa45.motivoking.model.DayActivity;
 
 import java.lang.reflect.Field;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
@@ -18,8 +21,9 @@ import java.util.Date;
 public class SqLiteDataHolder implements DataHolder {
     private int timeout = 1; // in seconds
     private Connection connection;
-    private Statement statement;
     private final String DB_NAME = "jdbc:sqlite:testfile.db";
+
+    private DateFormat dateFormat;
 
     private QueryBuilder qb;
     private boolean connectedSuccessfully = false;
@@ -27,56 +31,26 @@ public class SqLiteDataHolder implements DataHolder {
 
     public SqLiteDataHolder() {
 
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
         qb = new QueryBuilder();
     }
 
 
     public void initializeTable(boolean dropTables) {
         SqLiteData.setTableQuery(dropTables);
+        String query = SqLiteData.getTableQuery();
+
         connect();
-
-        runQuery(SqLiteData.getTableQuery());
-
-        close();
-    }
-
-
-    private void runQuery(String query) {
-
         try {
-            statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             statement.executeUpdate(query);
+
             statement.close();
         } catch (SQLException e) {
-            Error.set("Error: SQL statement");
+            Error.set("Error: running SQL statement");
             Error.set(e.getMessage());
         }
-    }
-
-
-    private long write(String query, boolean isInsert) {
-        long id = 0;
-        connect();
-
-        if(isInsert) {
-            try {
-                statement.executeUpdate(query);
-
-                // getting the generated id of the entity
-                ResultSet rs = statement.getGeneratedKeys();
-                if(rs.next()) {
-                    id = rs.getLong(1);
-                }
-
-                connection.commit();
-            } catch (SQLException e) {
-                Error.set("Data could not be inserted to SQL DB.");
-                Error.set(query);
-            }
-        }
         close();
-
-        return id;
     }
 
 
@@ -125,20 +99,20 @@ public class SqLiteDataHolder implements DataHolder {
 
     @Override
     public Day findDayById(long dayId) {
+
         if(dayId < 1) {
             Error.set("Day ID " + dayId + " not found.");
             return null;
         }
 
         qb.select("id").from("days").where("id", "=", String.valueOf(dayId));
-
         String query = qb.getQuery();
 
         Day d = null;
 
         connect();
         try {
-            statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
 
             while(rs.next()) {
@@ -147,36 +121,47 @@ public class SqLiteDataHolder implements DataHolder {
                 break;
             }
 
+            rs.close();
+            statement.close();
         } catch (SQLException e) {
             Error.set("Could not read the query correctly. [day by id]");
         }
         close();
 
-        return d != null ? d : null;
+        return d;
     }
 
     @Override
     public List<Day> findAllDays() {
-        qb.select("*").from("days");
 
+        qb.select("*").from("days");
         String query = qb.getQuery();
 
         List<Day> days = new ArrayList<>();
 
         connect();
         try {
-            statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
 
+            // fetching data
             while(rs.next()) {
                 Day d = new Day();
-                d.setDate( new Date(rs.getString("date")) );
+
+                String s = rs.getString("date");
+                d.setDate( dateFormat.parse(rs.getString("date")) );
+                d.setId( rs.getLong("id") );
 
                 days.add(d);
             }
 
+            rs.close();
+            statement.close();
         } catch (SQLException e) {
             Error.set("Could not read the query correctly. [all days]");
+            e.printStackTrace();
+        } catch (ParseException e) {
+            Error.set("Error parsing date.");
         }
         close();
 
@@ -191,15 +176,17 @@ public class SqLiteDataHolder implements DataHolder {
             return null;
         }
 
-        qb.select("a.*").from("activities as a, dayActivities as dA").where("dA.dayId", "=", String.valueOf(dayId));
-
+        qb.select("a.*")
+                .from("activities as a, dayActivities as dA")
+                .where("dA.dayId", "=", String.valueOf(dayId))
+                .groupBy("a.id");
         String query = qb.getQuery();
 
         List<Activity> activities = new ArrayList<>();
 
         connect();
         try {
-            statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
 
             while(rs.next()) {
@@ -214,8 +201,11 @@ public class SqLiteDataHolder implements DataHolder {
                 activities.add(a);
             }
 
+            rs.close();
+            statement.close();
         } catch (SQLException e) {
             Error.set("Could not read the query correctly. [find act by id]");
+            Error.set(e.getMessage());
         }
         close();
 
@@ -224,26 +214,33 @@ public class SqLiteDataHolder implements DataHolder {
 
     @Override
     public List<DayActivity> findAllDayActivities() {
-        qb.select("*").from("activities");
 
+        qb.select("*").from("dayActivities");
         String query = qb.getQuery();
 
         List<DayActivity> dayActivities = new ArrayList<>();
 
         connect();
         try {
-            statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
 
             while(rs.next()) {
 
-                DayActivity dA = new DayActivity(rs.getLong("dayId"), rs.getLong("activityId"));
+                DayActivity dA = new DayActivity(
+                        rs.getLong("dayId"),
+                        rs.getLong("activityId")
+                );
+                dA.setId( rs.getLong("id") );
 
                 dayActivities.add(dA);
             }
 
+            rs.close();
+            statement.close();
         } catch (SQLException e) {
             Error.set("Could not read the query correctly. [find all act]");
+            Error.set(e.getMessage());
         }
         close();
 
@@ -252,15 +249,15 @@ public class SqLiteDataHolder implements DataHolder {
 
     @Override
     public Activity findActivityById(long id) {
-        qb.select("*").from("activities").where("id", "=", String.valueOf(id));
 
+        qb.select("*").from("activities").where("id", "=", String.valueOf(id));
         String query = qb.getQuery();
 
         Activity activity = null;
 
         connect();
         try {
-            statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
 
             while(rs.next()) {
@@ -274,6 +271,8 @@ public class SqLiteDataHolder implements DataHolder {
                 break;
             }
 
+            rs.close();
+            statement.close();
         } catch (SQLException e) {
             Error.set("Could not read the query correctly. [act]");
         }
@@ -289,49 +288,55 @@ public class SqLiteDataHolder implements DataHolder {
 
     @Override
     public void addDay(Day day) {
-        Map<String, String> map = null;
-        try {
-            map = getFields(day);
-        } catch (IllegalAccessException e) {
-            Error.set("Cannot get fields of the specified model.");
-            return;
-        }
+        Map<String, String> map = new HashMap<>();
+        map.put("date", dateFormat.format(day.getDate()));
 
         qb.insertInto("days").values(map, true);
-
         String query = qb.getQuery();
-        this.write(query, true);
+
+        connect();
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.execute();
+
+            statement.close();
+        } catch (SQLException e) {
+            Error.set("Error: running SQL statement [add day]");
+            Error.set(e.getMessage());
+        }
+        close();
     }
 
     @Override
     public void addActivity(long dayId, Activity activity) {
-        String query;
-        Map<String, String> map;
-        Field[] fields;
 
         // check if day exists
-        qb.select("id").from("days").where("id", "=", String.valueOf(dayId));
-
-        query = qb.getQuery();
+        qb.select("*").from("days").where("id", "=", String.valueOf(dayId));
+        String query1 = qb.getQuery();
 
         List<Day> days = new ArrayList<>();
 
         connect();
         try {
-            statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(query);
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query1);
 
             while(rs.next()) {
 
                 Day d = new Day();
-                d.setDate( new Date(rs.getString("date").toString()) );
-                days.add(d);
+                d.setDate( dateFormat.parse( rs.getString("date") ) );
+                d.setId( rs.getLong("id") );
 
+                days.add(d);
                 break;
             }
 
+            rs.close();
+            statement.close();
         } catch (SQLException e) {
-            Error.set("Could not read the query correctly. [add act to days]");
+            Error.set("Could not read the query correctly. [add act to day :1]");
+        } catch (ParseException e) {
+            Error.set("Error parsing date.");
         }
         close();
 
@@ -340,31 +345,57 @@ public class SqLiteDataHolder implements DataHolder {
             return;
         }
 
-        // add activity
-        try {
-            map = getFields(activity);
-        } catch (IllegalAccessException e) {
-            Error.set("Cannot get fields of the specified model.");
-            return;
-        }
-        qb.insertInto("activity").values(map, true);
+        Map<String, String> map1 = new HashMap<>();
 
-        query = qb.getQuery();
-        long activityId = this.write(query, true);
+        // add activity
+        map1.put("name", activity.getName());
+        map1.put("stressLevel", String.valueOf(activity.getStressLevel()));
+        map1.put("relaxLevel", String.valueOf(activity.getRelaxLevel()));
+
+        qb.insertInto("activities").values(map1, true);
+        String query2 = qb.getQuery();
+
+        connect();
+        long activityId = 0;
+        try {
+            PreparedStatement statement = connection.prepareStatement(query2);
+            statement.execute();
+
+            ResultSet rs = statement.getGeneratedKeys();
+
+            if(rs.next()) {
+                activityId = rs.getLong(1);
+            }
+
+            rs.close();
+            statement.close();
+        } catch (SQLException e) {
+            Error.set("Error: running SQL statement [add act to day :2]");
+            Error.set(e.getMessage());
+        }
+        close();
+
+        Map<String, String> map2 = new HashMap<>();
 
         // add to merge table
         DayActivity dA = new DayActivity(dayId, activityId);
+        map2.put("dayId", String.valueOf(dA.getDayId()));
+        map2.put("activityId", String.valueOf(dA.getActivityId()));
+
+        qb.insertInto("dayActivities").values(map2, true);
+        String query3 = qb.getQuery();
+
+        connect();
         try {
-            map = getFields(dA);
-        } catch (IllegalAccessException e) {
-            Error.set("Cannot get fields of the specified model.");
-            return;
+            PreparedStatement statement = connection.prepareStatement(query3);
+            statement.execute();
+
+            statement.close();
+        } catch (SQLException e) {
+            Error.set("Error: running SQL statement [add act to day :3]");
+            Error.set(e.getMessage());
         }
-
-        qb.insertInto("dayActivities").values(map, true);
-
-        query = qb.getQuery();
-        this.write(query, true);
+        close();
     }
 
     public void addActivityToDay(long t_dayId, long t_activityId) {
@@ -373,19 +404,18 @@ public class SqLiteDataHolder implements DataHolder {
         map.put("activityId", String.valueOf(t_activityId));
 
         qb.insertInto("dayActivities").values(map, true);
-
         String query = qb.getQuery();
-        this.write(query, true);
-    }
 
-    private <T> Map<String, String> getFields(T entity) throws IllegalAccessException {
-        Map<String, String> map = new TreeMap<>();
-        Field[] fields = entity.getClass().getFields();
+        connect();
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.execute();
 
-        for(Field f : fields) {
-            map.put(f.getName(), (String) f.get(entity));
+            statement.close();
+        } catch (SQLException e) {
+            Error.set("Error: running SQL statement [add exist act to day]");
+            Error.set(e.getMessage());
         }
-
-        return map;
+        close();
     }
 }

@@ -38,6 +38,17 @@ public class QueryBuilder {
         return this;
     }
 
+    public QueryBuilder innerJoin(String table) {
+
+        query += " INNER JOIN " + table;
+        return this;
+    }
+
+    public QueryBuilder on(String target1, String target2) {
+
+        query += " ON " + target1 + "=" + target2;
+        return this;
+    }
 
     public QueryBuilder where(String target1, String delimiter, String target2) {
         query += " WHERE " + target1 + delimiter + target2;
@@ -54,6 +65,12 @@ public class QueryBuilder {
     public QueryBuilder orderBy(String order) {
 
         query += " ORDER_BY " + order;
+        return this;
+    }
+
+    public QueryBuilder groupBy(String order) {
+
+        query += " GROUP BY " + order;
         return this;
     }
 
@@ -76,7 +93,7 @@ public class QueryBuilder {
 
         for(Map.Entry<String, String> m : map.entrySet()) {
             queryKeysList.add(m.getKey());
-            queryValuesList.add(m.getValue());
+            queryValuesList.add("'" + m.getValue() + "'");
         }
 
         String queryKeys = queryKeysList.stream().collect(Collectors.joining(","));
