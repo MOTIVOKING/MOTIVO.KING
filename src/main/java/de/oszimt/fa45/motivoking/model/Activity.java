@@ -8,22 +8,11 @@ public class Activity extends Model {
     public static final int MAX_LEVEL = 9999;
     public static final int MIN_LEVEL = -9999;
 
-    private long id;
     private String name;
     private int stressLevel;
     private int relaxLevel;
 
     public Activity() {
-    }
-
-
-    public final long getId() {
-        return id;
-    }
-
-
-    public final void setId(long t_id) {
-        id = t_id;
     }
 
 

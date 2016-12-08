@@ -7,17 +7,7 @@ import java.util.Date;
  */
 public class Day extends Model {
 
-    private long id;
     private Date date;
-
-    public final long getId() {
-        return id;
-    }
-
-
-    public final void setId(long t_id) {
-        id = t_id;
-    }
 
 
     /**
