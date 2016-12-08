@@ -72,7 +72,7 @@ public class ProgramLogic1 implements ProgramLogic {
 
 
     /**
-     *
+     * Adds an existing activity to a existing day.
      * @param t_dayId
      * @param t_activityId
      */
@@ -101,12 +101,22 @@ public class ProgramLogic1 implements ProgramLogic {
         return days != null ? days : new ArrayList<>();
     }
 
+
+    /**
+     * Returns all entries of the day activities.
+     * @return A list af day activities.
+     */
     @Override
     public List<DayActivity> getDayActivities() {
         List<DayActivity> dA = mDataHolder.findAllDayActivities();
         return dA != null ? dA : new ArrayList<>();
     }
 
+
+    /**
+     * Returns all activities.
+     * @return A List of activities.
+     */
     @Override
     public List<Activity> getAllActivities() {
         return mDataHolder.findAllActivities();
