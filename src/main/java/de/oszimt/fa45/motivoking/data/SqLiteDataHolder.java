@@ -105,7 +105,7 @@ public class SqLiteDataHolder implements DataHolder {
             return null;
         }
 
-        qb.select("id").from("days").where("id", "=", String.valueOf(dayId));
+        qb.select("*").from("days").where("id", "=", String.valueOf(dayId));
         String query = qb.getQuery();
 
         Day d = null;
@@ -117,7 +117,7 @@ public class SqLiteDataHolder implements DataHolder {
 
             while(rs.next()) {
                 d = new Day();
-                d.setDate( new Date(rs.getString("date")) );
+                d.setDate( dateFormat.parse(rs.getString("date")) );
                 d.setId( rs.getLong("id") );
                 break;
             }
@@ -126,6 +126,9 @@ public class SqLiteDataHolder implements DataHolder {
             statement.close();
         } catch (SQLException e) {
             Error.set("Could not read the query correctly. [day by id]");
+            Error.set(e.getMessage());
+        } catch (ParseException e) {
+            Error.set("Error parsing date [day by id]");
         }
         close();
 
