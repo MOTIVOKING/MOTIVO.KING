@@ -267,7 +267,7 @@ public class SqLiteDataHolder implements DataHolder {
                         rs.getInt("stressLevel"),
                         rs.getInt("relaxLevel")
                 );
-
+                activity.setId( rs.getLong("id") );
                 break;
             }
 
@@ -283,7 +283,38 @@ public class SqLiteDataHolder implements DataHolder {
 
     @Override
     public List<Activity> findAllActivities() {
-        return null;
+        List<Activity> activities = new ArrayList<>();
+
+        qb.select("*").from("activities");
+        String query = qb.getQuery();
+
+        connect();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            while(rs.next()) {
+
+                Activity activity = new Activity(
+                        rs.getString("name"),
+                        rs.getInt("stressLevel"),
+                        rs.getInt("relaxLevel")
+                );
+                activity.setId( rs.getLong("id") );
+
+                activities.add(activity);
+
+                break;
+            }
+
+            rs.close();
+            statement.close();
+        } catch (SQLException e) {
+            Error.set("Could not read the query correctly. [act]");
+        }
+        close();
+
+        return activities;
     }
 
     @Override
