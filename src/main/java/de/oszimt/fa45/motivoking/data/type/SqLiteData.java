@@ -6,22 +6,8 @@ package de.oszimt.fa45.motivoking.data.type;
 public class SqLiteData extends Data {
 
     private static String tableQuery;
-    private long generatedKey = 0;
 
     public SqLiteData() {}
-
-
-    public long getGeneratedKey() {
-        long k = generatedKey;
-        generatedKey = 0;
-
-        return k;
-    }
-
-
-    public void setGeneratedKey(long t_key) {
-        generatedKey = t_key;
-    }
 
 
     public static void setTableQuery(boolean doDrop) {
