@@ -84,7 +84,7 @@ public class TerminalUserInterface implements UserInterface {
 
                 break;
             case "3": // TODO stats (?)
-                System.out.println("TODO stats\n\n");
+                System.out.println("Feature not implemented in this version\n\n");
                 break;
             case "4": // --- creating the day ---
             case "create day":
