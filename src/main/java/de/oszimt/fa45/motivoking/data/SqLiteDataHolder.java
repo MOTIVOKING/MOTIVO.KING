@@ -118,6 +118,7 @@ public class SqLiteDataHolder implements DataHolder {
             while(rs.next()) {
                 d = new Day();
                 d.setDate( new Date(rs.getString("date")) );
+                d.setId( rs.getLong("id") );
                 break;
             }
 
