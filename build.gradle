@@ -22,3 +22,14 @@ jar {
         attributes 'Main-Class': 'de.oszimt.fa45.motivoking.Main'
     }
 }
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'MOTIVO.KING',
+                'Implementation-Version': version,
+                'Main-Class': 'de.oszimt.fa45.motivoking.Main'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}

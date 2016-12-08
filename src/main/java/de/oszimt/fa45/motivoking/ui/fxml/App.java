@@ -106,7 +106,7 @@ public class App extends Application implements Initializable {
         initActivityTable();
         initActivities();
         tvDates.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            Platform.runLater(() -> labelSelectedDate.setText(newValue.getDate() == null ? "null" : new SimpleDateFormat("dd.MM.yyyy").format(newValue.getDate())));
+            labelSelectedDate.setText(newValue.getDate() == null ? "null" : new SimpleDateFormat("dd.MM.yyyy").format(newValue.getDate()));
             refreshDayDetails();
             buttonCreateActivity.setDisable(false);
         });
@@ -254,6 +254,7 @@ public class App extends Application implements Initializable {
     private void onAddActivity() {
         mProgramLogic.addActivity(tvDates.getSelectionModel().getSelectedItem().getId(), comboBoxAllActivities.getSelectionModel().getSelectedItem().getId());
         refreshDayDetails();
+        initActivities();
     }
 
     /**
